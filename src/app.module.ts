@@ -5,10 +5,10 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 
 import { RequestLoggingMiddleware } from '@/middleware/logger.middleware';
-import { AuthGuard } from './auth/auth.guard';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
-import { BlogModule } from './blog/blog.module';
+import { AuthGuard } from '@/api/auth/auth.guard';
+import { AuthModule } from '@/api/auth/auth.module';
+import { UsersModule } from '@/api/users/users.module';
+import { BlogModule } from '@/api/blog/blog.module';
 
 @Module({
   imports: [
