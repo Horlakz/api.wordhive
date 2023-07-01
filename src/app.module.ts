@@ -8,6 +8,7 @@ import { RequestLoggingMiddleware } from '@/middleware/logger.middleware';
 import { AuthGuard } from './auth/auth.guard';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { BlogModule } from './blog/blog.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { UsersModule } from './users/users.module';
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
     UsersModule,
+    BlogModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: AuthGuard }, JwtService],
 })
