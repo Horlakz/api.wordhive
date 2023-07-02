@@ -4,13 +4,11 @@ import {
   JoinColumn,
   JoinTable,
   ManyToMany,
-  OneToMany,
   OneToOne,
 } from 'typeorm';
 
 import { DefaultEntity } from '@/database/entity/default.entity';
 import { BlogCategory } from './category.entity';
-import { BlogComment } from './comment.entity';
 import { BlogTag } from './tag.entity';
 
 @Entity()
@@ -25,7 +23,7 @@ export class Blog extends DefaultEntity {
   @JoinTable()
   tags: BlogTag[];
 
-  @OneToOne(() => BlogCategory, (category) => category.uuid)
+  @OneToOne(() => BlogCategory)
   @JoinColumn()
   category: BlogCategory;
 }
