@@ -1,16 +1,18 @@
 import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
   BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
   HttpCode,
   HttpStatus,
+  Param,
   ParseUUIDPipe,
+  Patch,
+  Post,
 } from '@nestjs/common';
+
+import { Public } from '@/common/decorators/auth.public.decorator';
 import { BlogTagService as TagService } from '../services/tag.service';
 
 @Controller('blog-tag')
@@ -27,6 +29,7 @@ export class BlogTagController {
     return { message: 'Tag created successfully' };
   }
 
+  @Public()
   @Get()
   findAll() {
     return this.tagService.findAll();
