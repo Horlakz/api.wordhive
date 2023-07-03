@@ -9,7 +9,9 @@ import { AuthGuard } from '@/api/auth/auth.guard';
 import { AuthModule } from '@/api/auth/auth.module';
 import { UsersModule } from '@/api/users/users.module';
 import { BlogModule } from '@/api/blog/blog.module';
-import { FaqModule } from './api/faq/faq.module';
+import { FaqModule } from '@/api/faq/faq.module';
+import { ContactModule } from '@/api/contact/contact.module';
+import { ValidationPipe } from './validation/validation.pipe';
 
 @Module({
   imports: [
@@ -19,8 +21,13 @@ import { FaqModule } from './api/faq/faq.module';
     UsersModule,
     BlogModule,
     FaqModule,
+    ContactModule,
   ],
-  providers: [{ provide: APP_GUARD, useClass: AuthGuard }, JwtService],
+  providers: [
+    { provide: APP_GUARD, useClass: AuthGuard },
+    { provide: APP_PIPE, useClass: ValidationPipe },
+    JwtService,
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
