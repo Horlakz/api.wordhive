@@ -1,4 +1,6 @@
+import slugify from 'slugify';
 import {
+  BeforeInsert,
   Column,
   Entity,
   JoinColumn,
@@ -13,6 +15,9 @@ import { BlogTag } from './tag.entity';
 
 @Entity()
 export class Blog extends DefaultEntity {
+  @Column({ unique: true })
+  slug: string;
+
   @Column()
   title: string;
 
@@ -26,4 +31,9 @@ export class Blog extends DefaultEntity {
   @ManyToOne(() => BlogCategory)
   @JoinColumn()
   category: BlogCategory;
+
+  @BeforeInsert()
+  async slugifyTitle() {
+    this.slug = slugify(this.title, { lower: true, strict: true });
+  }
 }
