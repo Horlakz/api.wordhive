@@ -15,9 +15,4 @@ export class User extends DefaultEntity {
 
   @Column({ name: 'is_admin', default: false })
   isAdmin: boolean;
-
-  @AfterLoad()
-  removePassword() {
-    delete this.password;
-  }
 }
