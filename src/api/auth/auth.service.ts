@@ -17,15 +17,20 @@ export class AuthService {
   ) {}
 
   async login(email: string, pass: string): Promise<any> {
-    const user = await this.userService.findOne(email);
+    let payload: { email: string; sub: string };
+    try {
+      const user = await this.userService.findOne(email);
 
-    if (!user) throw new NotFoundException('User not found');
+      if (!user) throw new NotFoundException('User not found');
 
-    const comparePassword = await bcrypt.compare(pass, user.password);
-    if (!comparePassword)
-      throw new UnauthorizedException('Passwords do not match');
+      const comparePassword = await bcrypt.compare(pass, user.password);
+      if (!comparePassword)
+        throw new UnauthorizedException('Passwords do not match');
 
-    const payload = { email: user.email, sub: user.uuid };
+      payload = { email: user.email, sub: user.uuid };
+    } catch (err) {
+      throw new BadRequestException(err.message);
+    }
 
     return {
       access_token: await this.jwtService.signAsync(payload),
@@ -33,14 +38,23 @@ export class AuthService {
   }
 
   async register(fullname: string, email: string, pass: string): Promise<any> {
-    const exists = await this.userService.findOne(email);
-    if (exists) throw new BadRequestException('User already exists');
+    let payload: { email: string; sub: string };
 
-    const hashedPasword = await this.hashPassword(pass);
+    try {
+      const exists = await this.userService.findOne(email);
+      if (exists) throw new BadRequestException('User already exists');
 
-    const user = await this.userService.create(fullname, email, hashedPasword);
-    const payload = { email: user.email, sub: user.uuid };
+      const hashedPasword = await this.hashPassword(pass);
 
+      const user = await this.userService.create(
+        fullname,
+        email,
+        hashedPasword,
+      );
+      payload = { email: user.email, sub: user.uuid };
+    } catch (err) {
+      throw new BadRequestException(err.message);
+    }
     return {
       access_token: await this.jwtService.signAsync(payload),
     };
