@@ -1,4 +1,4 @@
-import { Entity, Column, AfterLoad } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 
 import { DefaultEntity } from '@/database/entity/default.entity';
 
