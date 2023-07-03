@@ -1,15 +1,20 @@
 import {
-  Controller,
-  Get,
-  Post,
+  BadRequestException,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  ParseArrayPipe,
+  Patch,
+  Post,
+  Query,
 } from '@nestjs/common';
-import { BlogService } from '../services/blog.service';
+
+import { Public } from '@/common/decorators/auth.public.decorator';
 import { CreateBlogDto } from '../dto/create-blog.dto';
 import { UpdateBlogDto } from '../dto/update-blog.dto';
+import { BlogService } from '../services/blog.service';
 
 @Controller('blog')
 export class BlogController {
@@ -17,26 +22,37 @@ export class BlogController {
 
   @Post()
   create(@Body() createBlogDto: CreateBlogDto) {
+    const { title, body, tags, category } = createBlogDto;
+    if (!title || !body || !tags || !category)
+      throw new BadRequestException('All Fields are required');
+
     return this.blogService.create(createBlogDto);
   }
 
+  @Public()
   @Get()
-  findAll() {
-    return this.blogService.findAll();
+  findAll(
+    @Query('category') category?: string,
+    @Query('tag', new ParseArrayPipe({ items: String, optional: true }))
+    tag?: string[],
+  ) {
+    return this.blogService.findAll(category, tag);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    // return this.blogService.findOne(id);
+  @Public()
+  @Get(':slug')
+  findOne(@Param('slug') slug: string) {
+    return this.blogService.findOneBySlug(slug);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateBlogDto: UpdateBlogDto) {
-    return this.blogService.update(+id, updateBlogDto);
+    return this.blogService.update(id, updateBlogDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.blogService.remove(+id);
+  async remove(@Param('id') id: string) {
+    await this.blogService.remove(id);
+    return { message: 'Blog deleted successfully' };
   }
 }
