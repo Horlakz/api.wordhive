@@ -1,4 +1,4 @@
-import { Entity, Column } from 'typeorm';
+import { Entity, Column, AfterLoad } from 'typeorm';
 
 import { DefaultEntity } from '@/database/entity/default.entity';
 
@@ -15,4 +15,9 @@ export class User extends DefaultEntity {
 
   @Column({ name: 'is_admin', default: false })
   isAdmin: boolean;
+
+  @AfterLoad()
+  removePassword() {
+    delete this.password;
+  }
 }
