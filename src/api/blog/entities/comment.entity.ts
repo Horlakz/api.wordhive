@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 
 import { DefaultEntity } from '@/database/entity/default.entity';
 import { Blog } from './blog.entity';
@@ -6,7 +6,8 @@ import { Blog } from './blog.entity';
 @Entity()
 export class BlogComment extends DefaultEntity {
   @ManyToOne(() => Blog)
-  blog_id: Blog;
+  @JoinColumn()
+  blog: Blog;
 
   @Column()
   fullname: string;
