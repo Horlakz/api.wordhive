@@ -5,7 +5,6 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
-  OneToOne,
 } from 'typeorm';
 
 import { DefaultEntity } from '@/database/entity/default.entity';
