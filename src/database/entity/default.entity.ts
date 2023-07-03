@@ -1,4 +1,6 @@
 import {
+  AfterLoad,
+  Column,
   CreateDateColumn,
   DeleteDateColumn,
   Generated,
@@ -8,6 +10,7 @@ import {
 
 export abstract class DefaultEntity {
   @Generated('increment')
+  @Column()
   id: number;
 
   @PrimaryGeneratedColumn('uuid')
@@ -21,4 +24,10 @@ export abstract class DefaultEntity {
 
   @DeleteDateColumn()
   deleted_at: Date;
+
+  @AfterLoad()
+  async removeIdAndDeletedAt() {
+    delete this.id;
+    delete this.deleted_at;
+  }
 }
