@@ -4,6 +4,7 @@ import {
   JoinColumn,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   OneToOne,
 } from 'typeorm';
 
@@ -23,7 +24,7 @@ export class Blog extends DefaultEntity {
   @JoinTable()
   tags: BlogTag[];
 
-  @OneToOne(() => BlogCategory)
+  @ManyToOne(() => BlogCategory)
   @JoinColumn()
   category: BlogCategory;
 }
