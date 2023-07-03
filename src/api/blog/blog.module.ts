@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { BlogController } from './controller/blog.controller';
-import { BlogCategoryController } from './controller/category.controller';
-import { BlogCommentController } from './controller/comment.controller';
-import { BlogTagController } from './controller/tag.controller';
+import { BlogController } from './controllers/blog.controller';
+import { BlogCategoryController } from './controllers/category.controller';
+import { BlogCommentController } from './controllers/comment.controller';
+import { BlogTagController } from './controllers/tag.controller';
 import { Blog } from './entities/blog.entity';
 import { BlogCategory } from './entities/category.entity';
 import { BlogComment } from './entities/comment.entity';
