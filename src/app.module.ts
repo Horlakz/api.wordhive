@@ -9,6 +9,7 @@ import { AuthGuard } from '@/api/auth/auth.guard';
 import { AuthModule } from '@/api/auth/auth.module';
 import { UsersModule } from '@/api/users/users.module';
 import { BlogModule } from '@/api/blog/blog.module';
+import { FaqModule } from './api/faq/faq.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { BlogModule } from '@/api/blog/blog.module';
     AuthModule,
     UsersModule,
     BlogModule,
+    FaqModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: AuthGuard }, JwtService],
 })
