@@ -26,6 +26,8 @@ export class BlogCommentService {
   }
 
   async findAllByBlog(uuid: string): Promise<BlogComment[]> {
+    await this.blogService.findOne(uuid);
+
     return this.blogCommentRepository.find({ where: { blog: { uuid } } });
   }
 }
