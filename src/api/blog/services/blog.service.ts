@@ -1,60 +1,105 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { CreateBlogDto } from '../dto/create-blog.dto';
 import { UpdateBlogDto } from '../dto/update-blog.dto';
-import { BlogComment } from '../entities/comment.entity';
-import { BlogCategory } from '../entities/category.entity';
-import { BlogTag } from '../entities/tag.entity';
 import { Blog } from '../entities/blog.entity';
+import { BlogTag } from '../entities/tag.entity';
+import { BlogCategoryService } from './category.service';
+import { BlogTagService } from './tag.service';
 
 @Injectable()
 export class BlogService {
-  constructor() // @InjectRepository(Blog)
-  // private blogRepository: Repository<Blog>,
-  // @InjectRepository(BlogComment)
-  // private blogCommentRepository: Repository<BlogComment>,
-  // @InjectRepository(BlogTag)
-  // private blogTagRepository: Repository<BlogTag>,
-  {}
+  constructor(
+    @InjectRepository(Blog)
+    private blogRepository: Repository<Blog>,
+    private blogTagService: BlogTagService,
+    private blogCategoryService: BlogCategoryService,
+  ) {}
 
-  // createTag(name: string) {
-  //   const tag = new BlogTag();
-  //   tag.name = name;
-
-  //   return this.blogTagRepository.save(tag);
-  // }
-
-  // async createComment(body: string, blog_id: string) {
-  //   const blog = await this.findOneBlog(blog_id);
-  //   if (!blog) throw new NotFoundException('Blog not found');
-
-  //   const comment = new BlogComment();
-
-  //   comment.message = body;
-  //   comment.blog_id = blog;
-
-  //   return this.blogCommentRepository.save(comment);
-  // }
-
-  create(createBlogDto: CreateBlogDto) {
-    return 'This action adds a new blog';
+  async create(createBlogDto: CreateBlogDto) {
+    const blog = new Blog();
+    return this.save(blog, createBlogDto);
   }
 
-  findAll() {
-    return `This action returns all blog`;
+  findAll(category?: string, tags?: string[]) {
+    const queryBuilder = this.blogRepository
+      .createQueryBuilder('blog')
+      .leftJoinAndSelect('blog.tags', 'tags')
+      .leftJoinAndSelect('blog.category', 'category');
+
+    if (category) {
+      queryBuilder.where('category.uuid = :category', { category });
+    }
+
+    if (tags && tags.length > 0) {
+      queryBuilder
+        .leftJoin('blog.tags', 'tag')
+        .andWhere('tags.uuid IN (:...tags)', { tags });
+    }
+
+    return queryBuilder.getMany();
   }
 
-  // async findOneBlog(id: string) {
-  //   return this.blogRepository.findOneBy({ uuid: id });
-  // }
-
-  update(id: number, updateBlogDto: UpdateBlogDto) {
-    return `This action updates a #${id} blog`;
+  async findOne(uuid: string) {
+    let blog: Blog;
+    try {
+      blog = await this.blogRepository.findOne({
+        where: { uuid },
+        relations: { tags: true, category: true },
+      });
+      if (!blog) throw new NotFoundException('Blog not found');
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+    return blog;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} blog`;
+  async findOneBySlug(slug: string) {
+    const blog = await this.blogRepository.findOne({
+      where: { slug },
+      relations: { tags: true, category: true },
+    });
+    if (!blog) throw new NotFoundException('Blog not found');
+    return blog;
+  }
+
+  async update(uuid: string, updateBlogDto: UpdateBlogDto) {
+    const blog = await this.findOne(uuid);
+    return this.save(blog, updateBlogDto);
+  }
+
+  async remove(uuid: string) {
+    await this.findOne(uuid);
+    return this.blogRepository.softDelete({ uuid });
+  }
+
+  async save(blog: Blog, dto: UpdateBlogDto): Promise<Blog> {
+    let newBlog: Blog;
+    let tags: BlogTag[] = [];
+    for (let i = 0; i < dto.tags?.length; i++) {
+      const tag = await this.blogTagService.findOne(dto.tags[i]);
+      if (tag) tags.push(tag);
+    }
+
+    const category = await this.blogCategoryService.findOne(dto.category);
+
+    blog.title = dto.title;
+    blog.body = dto.body;
+    blog.tags = tags;
+    blog.category = category;
+
+    try {
+      newBlog = await this.blogRepository.save(blog);
+    } catch (err) {
+      throw new BadRequestException(err.message);
+    }
+
+    return newBlog;
   }
 }
