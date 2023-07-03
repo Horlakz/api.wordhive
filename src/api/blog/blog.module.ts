@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { BlogController } from './controller/blog.controller';
 import { BlogCategoryController } from './controller/category.controller';
+import { BlogCommentController } from './controller/comment.controller';
 import { BlogTagController } from './controller/tag.controller';
 import { Blog } from './entities/blog.entity';
 import { BlogCategory } from './entities/category.entity';
@@ -10,13 +11,24 @@ import { BlogComment } from './entities/comment.entity';
 import { BlogTag } from './entities/tag.entity';
 import { BlogService } from './services/blog.service';
 import { BlogCategoryService } from './services/category.service';
+import { BlogCommentService } from './services/comment.service';
 import { BlogTagService } from './services/tag.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([BlogCategory, BlogTag, BlogComment, Blog]),
   ],
-  controllers: [BlogController, BlogCategoryController, BlogTagController],
-  providers: [BlogService, BlogCategoryService, BlogTagService],
+  controllers: [
+    BlogController,
+    BlogCategoryController,
+    BlogTagController,
+    BlogCommentController,
+  ],
+  providers: [
+    BlogService,
+    BlogCategoryService,
+    BlogTagService,
+    BlogCommentService,
+  ],
 })
 export class BlogModule {}
