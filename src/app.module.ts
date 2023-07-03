@@ -11,7 +11,7 @@ import { UsersModule } from '@/api/users/users.module';
 import { BlogModule } from '@/api/blog/blog.module';
 import { FaqModule } from '@/api/faq/faq.module';
 import { ContactModule } from '@/api/contact/contact.module';
-import { ValidationPipe } from './validation/validation.pipe';
+import { ValidationPipe } from '@/validation/validation.pipe';
 
 @Module({
   imports: [
