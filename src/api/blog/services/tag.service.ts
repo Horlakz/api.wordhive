@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -30,23 +34,18 @@ export class BlogTagService {
   }
 
   async findOne(uuid: string): Promise<BlogTag> {
-    return this.blogTagRepository.findOneBy({ uuid });
+    const tag = await this.blogTagRepository.findOneBy({ uuid });
+    if (!tag) throw new NotFoundException('Tag not found');
+    return tag;
   }
 
   async update(uuid: string, name: string): Promise<any> {
-    await this.checkTagExists(uuid);
+    await this.findOne(uuid);
     return this.blogTagRepository.update(uuid, { name: name });
   }
 
   async remove(uuid: string): Promise<any> {
-    await this.checkTagExists(uuid);
+    await this.findOne(uuid);
     return this.blogTagRepository.softDelete(uuid);
-  }
-
-  async checkTagExists(uuid: string): Promise<boolean> {
-    const tag = await this.findOne(uuid);
-    if (!tag) throw new BadRequestException('Tag not found');
-
-    return true;
   }
 }

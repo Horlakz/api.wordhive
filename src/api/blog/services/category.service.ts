@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -30,23 +34,18 @@ export class BlogCategoryService {
   }
 
   async findOne(uuid: string): Promise<BlogCategory> {
-    return this.blogCategoryRepository.findOneBy({ uuid });
+    const category = await this.blogCategoryRepository.findOneBy({ uuid });
+    if (!category) throw new NotFoundException('Category not found');
+    return category;
   }
 
   async update(uuid: string, name: string): Promise<any> {
-    await this.checkCategoryExists(uuid);
+    await this.findOne(uuid);
     return this.blogCategoryRepository.update(uuid, { name: name });
   }
 
   async remove(uuid: string): Promise<any> {
-    await this.checkCategoryExists(uuid);
+    await this.findOne(uuid);
     return this.blogCategoryRepository.softDelete(uuid);
-  }
-
-  async checkCategoryExists(uuid: string): Promise<boolean> {
-    const category = await this.findOne(uuid);
-    if (!category) throw new BadRequestException('Category not found');
-
-    return true;
   }
 }
