@@ -9,12 +9,12 @@ import {
   ManyToOne,
 } from 'typeorm';
 
-import { DefaultEntity } from '@/database/entity/default.entity';
+import { BaseEntity } from '@/database/entity/base.entity';
 import { BlogCategory } from './category.entity';
 import { BlogTag } from './tag.entity';
 
 @Entity()
-export class Blog extends DefaultEntity {
+export class Blog extends BaseEntity {
   @Column({ unique: true })
   slug: string;
 

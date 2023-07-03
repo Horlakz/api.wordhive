@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-export abstract class DefaultEntity {
+export abstract class BaseEntity {
   @Generated('increment')
   @Column()
   id: number;

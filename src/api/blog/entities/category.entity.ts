@@ -1,9 +1,9 @@
 import { Entity, Column } from 'typeorm';
 
-import { DefaultEntity } from '@/database/entity/default.entity';
+import { BaseEntity } from '@/database/entity/base.entity';
 
 @Entity()
-export class BlogCategory extends DefaultEntity {
+export class BlogCategory extends BaseEntity {
   @Column()
   name: string;
 }

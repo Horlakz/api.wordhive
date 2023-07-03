@@ -1,10 +1,10 @@
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 
-import { DefaultEntity } from '@/database/entity/default.entity';
+import { BaseEntity } from '@/database/entity/base.entity';
 import { Blog } from './blog.entity';
 
 @Entity()
-export class BlogComment extends DefaultEntity {
+export class BlogComment extends BaseEntity {
   @ManyToOne(() => Blog)
   @JoinColumn()
   blog: Blog;
