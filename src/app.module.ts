@@ -12,6 +12,7 @@ import { BlogModule } from '@/api/blog/blog.module';
 import { FaqModule } from '@/api/faq/faq.module';
 import { ContactModule } from '@/api/contact/contact.module';
 import { ValidationPipe } from '@/validation/validation.pipe';
+import { ShowcaseModule } from './showcase/showcase.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ValidationPipe } from '@/validation/validation.pipe';
     BlogModule,
     FaqModule,
     ContactModule,
+    ShowcaseModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },
