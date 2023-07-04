@@ -6,7 +6,8 @@ import {
 } from '@aws-sdk/client-s3';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import slugify from 'slugify';
+
+import { AppUtilities } from '@/app.utilities';
 
 @Injectable()
 export class AwsS3Service {
@@ -54,12 +55,9 @@ export class AwsS3Service {
   }
 
   generateKey(originalfilename: string) {
-    const timestamp = new Date().getTime();
     const folder = this.configService.get<string>('AWS_BUCKET_BASE_FOLDER');
-    const ext = originalfilename.split('.').pop().toLocaleLowerCase();
-    const filename = originalfilename.split('.').slice(0, -1).join('.');
-    const slug = slugify(filename, { lower: true, strict: true });
+    const newFilename = AppUtilities.transformFilename(originalfilename);
 
-    return `${folder}/${timestamp}-${slug}.${ext}`;
+    return `${folder}/${newFilename}`;
   }
 }
