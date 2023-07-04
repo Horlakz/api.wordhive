@@ -6,14 +6,14 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { MediaService } from '@/api/media/media.service';
+import { PaginationDto } from '@/common/dto/pagination.dto';
 import { CreateShowcaseDto } from '../dto/create-showcase.dto';
 import { UpdateShowcaseDto } from '../dto/update-showcase.dto';
-import { Showcase } from '../entities/showcase.entity';
 import { ShowcaseGenre } from '../entities/genre.entity';
+import { Showcase } from '../entities/showcase.entity';
 import { ShowcaseFieldService } from './field.service';
 import { ShowcaseGenreService } from './genre.service';
-import { AwsS3Service } from '@/config/aws/aws_s3.service';
-import { PaginationDto } from '@/common/dto/pagination.dto';
 
 @Injectable()
 export class ShowcaseService {
@@ -22,7 +22,7 @@ export class ShowcaseService {
     private showcaseRepository: Repository<Showcase>,
     private showcaseGenreService: ShowcaseGenreService,
     private showcaseFieldService: ShowcaseFieldService,
-    private awsService: AwsS3Service,
+    private mediaService: MediaService,
   ) {}
 
   async create(createShowcaseDto: CreateShowcaseDto) {
@@ -64,15 +64,6 @@ export class ShowcaseService {
     return showcase;
   }
 
-  // async findOneBySlug(slug: string) {
-  //   const blog = await this.showcaseRepository.findOne({
-  //     where: { slug },
-  //     relations: { tags: true, category: true },
-  //   });
-  //   if (!blog) throw new NotFoundException('Blog not found');
-  //   return blog;
-  // }
-
   async update(uuid: string, updateBlogDto: UpdateShowcaseDto) {
     const blog = await this.findOne(uuid);
     return this.save(blog, updateBlogDto);
@@ -82,7 +73,7 @@ export class ShowcaseService {
     const showcase = await this.findOne(uuid);
 
     try {
-      await this.awsService.delete(showcase.image);
+      await this.mediaService.delete(showcase.image);
       await this.showcaseRepository.softDelete({ uuid });
     } catch (err) {
       throw new BadRequestException(err.message);
@@ -98,7 +89,7 @@ export class ShowcaseService {
     }
 
     const field = await this.showcaseFieldService.findOne(dto.field);
-    const image = this.awsService.generateKey(dto.image.originalname);
+    const image = this.mediaService.generateKey(dto.image.originalname);
 
     showcase.title = dto.title;
     showcase.body = dto.body;
@@ -107,7 +98,7 @@ export class ShowcaseService {
     showcase.image = image;
 
     try {
-      await this.awsService.upload(dto.image);
+      await this.mediaService.upload(dto.image);
       newShowcase = await this.showcaseRepository.save(showcase);
     } catch (err) {
       throw new BadRequestException(err.message);
