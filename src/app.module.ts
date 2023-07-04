@@ -9,8 +9,10 @@ import { AuthModule } from '@/api/auth/auth.module';
 import { BlogModule } from '@/api/blog/blog.module';
 import { ContactModule } from '@/api/contact/contact.module';
 import { FaqModule } from '@/api/faq/faq.module';
+import { MediaModule } from '@/api/media/media.module';
 import { ShowcaseModule } from '@/api/showcase/showcase.module';
 import { UsersModule } from '@/api/users/users.module';
+import { AwsModule } from '@/config/aws/aws.module';
 import { RequestLoggingMiddleware } from '@/middleware/logger.middleware';
 import { ValidationPipe } from '@/validation/validation.pipe';
 
@@ -24,6 +26,8 @@ import { ValidationPipe } from '@/validation/validation.pipe';
     FaqModule,
     ContactModule,
     ShowcaseModule,
+    MediaModule,
+    AwsModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },
