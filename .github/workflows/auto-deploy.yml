@@ -1,0 +1,52 @@
+name: Deploy to Ubuntu Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Generate .env file
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_CORS_ORIGIN: ${{ secrets.CORS_ORIGIN }}
+          envkey_JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          envkey_JWT_EXPIRES_IN: ${{ secrets.JWT_EXPIRES_IN }}
+          envkey_EMAIL: ${{ secrets.EMAIL }}
+          envkey_EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          envkey_EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          envkey_AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+          envkey_AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
+          envkey_AWS_BUCKET_REGION: ${{ secrets.AWS_BUCKET_REGION }}
+          envkey_AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          envkey_AWS_BUCKET_BASE_FOLDER: ${{ secrets.AWS_BUCKET_BASE_FOLDER }}
+          envkey_PAYSTACK_SECRET_KEY: ${{ secrets.PAYSTACK_SECRET_KEY }}
+          envkey_DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          envkey_DB_HOST: ${{ secrets.DB_HOST }}
+          envkey_DB_NAME: ${{ secrets.DB_NAME }}
+          envkey_DB_PORT: ${{ secrets.PAYSTACK_SECRET_KEY }}
+      - name: Build Docker images
+        run: |
+          docker build . -t wordhive-api:${{ github.sha }}
+
+  run:
+    runs-on: self-hosted
+
+    needs:
+      - build
+
+    steps:
+      - name: remove old container
+        run: |
+          docker rm --force wordhive-api
+
+      - name: run new container
+        run: |
+          docker run -d --restart unless-stopped --name wordhive-api -p 4400:8000 wordhive-api:${{ github.sha }}
