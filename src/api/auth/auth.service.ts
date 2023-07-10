@@ -1,13 +1,13 @@
 import {
-  Injectable,
-  UnauthorizedException,
-  NotFoundException,
   BadRequestException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
 
 import { UsersService } from '@/api/users/users.service';
+import { AppUtilities } from '@/app.utilities';
 
 @Injectable()
 export class AuthService {
@@ -23,7 +23,10 @@ export class AuthService {
 
       if (!user) throw new NotFoundException('User not found');
 
-      const comparePassword = await bcrypt.compare(pass, user.password);
+      const comparePassword = await AppUtilities.validateHash(
+        pass,
+        user.password,
+      );
       if (!comparePassword)
         throw new UnauthorizedException('Passwords do not match');
 
@@ -44,13 +47,7 @@ export class AuthService {
       const exists = await this.userService.findOne(email);
       if (exists) throw new BadRequestException('User already exists');
 
-      const hashedPasword = await this.hashPassword(pass);
-
-      const user = await this.userService.create(
-        fullname,
-        email,
-        hashedPasword,
-      );
+      const user = await this.userService.create(fullname, email, pass);
       payload = { email: user.email, sub: user.uuid };
     } catch (err) {
       throw new BadRequestException(err.message);
@@ -58,12 +55,5 @@ export class AuthService {
     return {
       access_token: await this.jwtService.signAsync(payload),
     };
-  }
-
-  private async hashPassword(password: string): Promise<string> {
-    const saltRound = 12;
-    const salt: string = await bcrypt.genSalt(saltRound);
-
-    return await bcrypt.hash(password, salt);
   }
 }
