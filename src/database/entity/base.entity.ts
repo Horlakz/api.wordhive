@@ -24,10 +24,4 @@ export abstract class BaseEntity {
 
   @DeleteDateColumn()
   deleted_at: Date;
-
-  @AfterLoad()
-  async removeIdAndDeletedAt() {
-    delete this.id;
-    delete this.deleted_at;
-  }
 }
