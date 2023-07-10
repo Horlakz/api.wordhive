@@ -5,7 +5,7 @@ import { Blog } from './blog.entity';
 
 @Entity()
 export class BlogComment extends BaseEntity {
-  @ManyToOne(() => Blog)
+  @ManyToOne(() => Blog, { onDelete: 'CASCADE' })
   @JoinColumn()
   blog: Blog;
 
