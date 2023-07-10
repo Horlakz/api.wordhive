@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { AwsS3Service } from '@/config/aws/aws_s3.service';
+import { AwsS3Service } from '@/shared/services/aws_s3.service';
 import { Readable } from 'stream';
 
 @Injectable()
