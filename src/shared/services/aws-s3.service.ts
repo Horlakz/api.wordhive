@@ -1,3 +1,9 @@
+import type {
+  PutObjectCommandInput,
+  DeleteObjectCommandInput,
+  GetObjectCommandInput,
+} from '@aws-sdk/client-s3';
+
 import {
   DeleteObjectCommand,
   GetObjectCommand,
@@ -11,18 +17,20 @@ import { AppUtilities } from '@/app.utilities';
 
 @Injectable()
 export class AwsS3Service {
-  constructor(private configService: ConfigService) {}
+  private readonly s3: S3Client;
 
-  private client = new S3Client({
-    region: this.configService.get<string>('AWS_BUCKET_REGION'),
-    credentials: {
-      accessKeyId: this.configService.get<string>('AWS_ACCESS_KEY'),
-      secretAccessKey: this.configService.get<string>('AWS_SECRET_KEY'),
-    },
-  });
+  constructor(private configService: ConfigService) {
+    this.s3 = new S3Client({
+      region: this.configService.get<string>('AWS_BUCKET_REGION'),
+      credentials: {
+        accessKeyId: this.configService.get<string>('AWS_ACCESS_KEY'),
+        secretAccessKey: this.configService.get<string>('AWS_SECRET_KEY'),
+      },
+    });
+  }
 
   async upload(file: Express.Multer.File) {
-    const uploadParams = {
+    const uploadParams: PutObjectCommandInput = {
       Bucket: this.configService.get<string>('AWS_BUCKET_NAME'),
       Body: file.buffer,
       Key: this.generateKey(file.originalname),
@@ -30,28 +38,28 @@ export class AwsS3Service {
 
     const command = new PutObjectCommand(uploadParams);
 
-    return await this.client.send(command);
+    return await this.s3.send(command);
   }
 
   async stream(fileKey: string) {
-    const downloadParams = {
+    const downloadParams: GetObjectCommandInput = {
       Key: fileKey,
       Bucket: this.configService.get<string>('AWS_BUCKET_NAME'),
     };
 
     const command = new GetObjectCommand(downloadParams);
 
-    return await this.client.send(command);
+    return await this.s3.send(command);
   }
 
   async delete(fileKey: string) {
-    const deleteParams = {
+    const deleteParams: DeleteObjectCommandInput = {
       Key: fileKey,
       Bucket: this.configService.get<string>('AWS_BUCKET_NAME'),
     };
     const command = new DeleteObjectCommand(deleteParams);
 
-    return await this.client.send(command);
+    return await this.s3.send(command);
   }
 
   generateKey(originalfilename: string) {
