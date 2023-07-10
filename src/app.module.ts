@@ -12,8 +12,8 @@ import { FaqModule } from '@/api/faq/faq.module';
 import { MediaModule } from '@/api/media/media.module';
 import { ShowcaseModule } from '@/api/showcase/showcase.module';
 import { UsersModule } from '@/api/users/users.module';
-import { AwsModule } from '@/config/aws/aws.module';
 import { RequestLoggingMiddleware } from '@/middleware/logger.middleware';
+import { SharedModule } from '@/shared/shared.module';
 import { ValidationPipe } from '@/validation/validation.pipe';
 
 @Module({
@@ -27,7 +27,7 @@ import { ValidationPipe } from '@/validation/validation.pipe';
     ContactModule,
     ShowcaseModule,
     MediaModule,
-    AwsModule,
+    SharedModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },
