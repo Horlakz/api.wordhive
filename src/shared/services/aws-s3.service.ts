@@ -3,7 +3,6 @@ import type {
   DeleteObjectCommandInput,
   GetObjectCommandInput,
 } from '@aws-sdk/client-s3';
-
 import {
   DeleteObjectCommand,
   GetObjectCommand,
