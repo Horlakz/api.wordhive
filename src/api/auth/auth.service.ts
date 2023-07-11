@@ -16,7 +16,7 @@ export class AuthService {
     private userService: UsersService,
   ) {}
 
-  private payload: { email: string; sub: string };
+  private payload: { sub: string };
 
   async login(email: string, pass: string): Promise<any> {
     try {
@@ -31,7 +31,7 @@ export class AuthService {
       if (!comparePassword)
         throw new UnauthorizedException('Passwords do not match');
 
-      this.payload = { email: user.email, sub: user.uuid };
+      this.payload = { sub: user.uuid };
     } catch (err) {
       throw new BadRequestException(err.message);
     }
@@ -47,7 +47,7 @@ export class AuthService {
       if (exists) throw new BadRequestException('User already exists');
 
       const user = await this.userService.create(fullname, email, pass);
-      this.payload = { email: user.email, sub: user.uuid };
+      this.payload = { sub: user.uuid };
     } catch (err) {
       throw new BadRequestException(err.message);
     }
