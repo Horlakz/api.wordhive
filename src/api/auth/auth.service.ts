@@ -6,14 +6,14 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
-import { UsersService } from '@/api/users/users.service';
+import { UserService } from '@/api/user/user.service';
 import { AppUtilities } from '@/app.utilities';
 
 @Injectable()
 export class AuthService {
   constructor(
     private jwtService: JwtService,
-    private userService: UsersService,
+    private userService: UserService,
   ) {}
 
   private payload: { sub: string };
