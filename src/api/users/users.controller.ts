@@ -8,7 +8,7 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   @Get()
   async profile(@Req() req) {
-    const user = await this.userService.findOne(req.user.email);
+    const user = await this.userService.findByUUID(req.user.sub);
 
     return { email: user.email, fullname: user.fullname };
   }
