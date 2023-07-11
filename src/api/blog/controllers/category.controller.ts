@@ -20,8 +20,6 @@ export class BlogCategoryController {
   @HttpCode(HttpStatus.CREATED)
   @Post()
   async create(@Body() createCategoryDto: { name: string }) {
-    if (!createCategoryDto.name)
-      throw new BadRequestException('Category Name is required');
     await this.categoryService.create(createCategoryDto.name);
 
     return { message: 'Category created successfully' };

@@ -22,10 +22,6 @@ export class BlogController {
 
   @Post()
   create(@Body() createBlogDto: CreateBlogDto) {
-    const { title, body, tags, category } = createBlogDto;
-    if (!title || !body || !tags || !category)
-      throw new BadRequestException('All Fields are required');
-
     return this.blogService.create(createBlogDto);
   }
 

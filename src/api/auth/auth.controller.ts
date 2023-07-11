@@ -20,20 +20,13 @@ export class AuthController {
   @Public()
   @Post('login')
   login(@Body() loginDto: LoginDto) {
-    return this.authService.login(loginDto.email, loginDto.password);
+    return this.authService.login(loginDto);
   }
 
   @HttpCode(HttpStatus.CREATED)
   @Public()
   @Post('register')
   register(@Body() registerDto: RegisterDto) {
-    if (!registerDto.email || !registerDto.password || !registerDto.fullname)
-      throw new BadRequestException('All fields are required)');
-
-    return this.authService.register(
-      registerDto.fullname,
-      registerDto.email,
-      registerDto.password,
-    );
+    return this.authService.register(registerDto);
   }
 }

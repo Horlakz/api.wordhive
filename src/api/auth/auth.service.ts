@@ -8,6 +8,8 @@ import { JwtService } from '@nestjs/jwt';
 
 import { UserService } from '@/api/user/user.service';
 import { AppUtilities } from '@/app.utilities';
+import { RegisterDto } from './dto/register.dto';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -18,14 +20,14 @@ export class AuthService {
 
   private payload: { sub: string };
 
-  async login(email: string, pass: string): Promise<any> {
+  async login(loginDto: LoginDto): Promise<any> {
     try {
-      const user = await this.userService.findOne(email);
+      const user = await this.userService.findOne(loginDto.email);
 
       if (!user) throw new NotFoundException('User not found');
 
       const comparePassword = await AppUtilities.validateHash(
-        pass,
+        loginDto.password,
         user.password,
       );
       if (!comparePassword)
@@ -41,12 +43,16 @@ export class AuthService {
     };
   }
 
-  async register(fullname: string, email: string, pass: string): Promise<any> {
+  async register(registerDto: RegisterDto): Promise<any> {
     try {
-      const exists = await this.userService.findOne(email);
+      const exists = await this.userService.findOne(registerDto.email);
       if (exists) throw new BadRequestException('User already exists');
 
-      const user = await this.userService.create(fullname, email, pass);
+      const user = await this.userService.create(
+        registerDto.fullname,
+        registerDto.email,
+        registerDto.password,
+      );
       this.payload = { sub: user.uuid };
     } catch (err) {
       throw new BadRequestException(err.message);

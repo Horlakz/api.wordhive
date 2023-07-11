@@ -1,3 +1,5 @@
+import { PartialType } from '@nestjs/mapped-types';
+
 import { CreateBlogDto } from './create-blog.dto';
 
-export interface UpdateBlogDto extends CreateBlogDto {}
+export class UpdateBlogDto extends PartialType(CreateBlogDto) {}

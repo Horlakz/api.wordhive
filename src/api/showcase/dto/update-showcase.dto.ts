@@ -1,3 +1,5 @@
+import { PartialType } from '@nestjs/mapped-types';
+
 import { CreateShowcaseDto } from './create-showcase.dto';
 
-export interface UpdateShowcaseDto extends CreateShowcaseDto {}
+export class UpdateShowcaseDto extends PartialType(CreateShowcaseDto) {}

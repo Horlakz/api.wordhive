@@ -25,9 +25,6 @@ export class BlogCommentController {
     @Body()
     createCommentDto: CreateCommentDto,
   ) {
-    if (!createCommentDto.fullname || !createCommentDto.message)
-      throw new BadRequestException('Comment Fields are required');
-
     await this.commentService.create(createCommentDto, blogId);
 
     return { message: 'Comment created successfully' };
