@@ -4,14 +4,15 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 
-import { AuthGuard } from '@/api/auth/auth.guard';
 import { AuthModule } from '@/api/auth/auth.module';
 import { BlogModule } from '@/api/blog/blog.module';
 import { ContactModule } from '@/api/contact/contact.module';
 import { FaqModule } from '@/api/faq/faq.module';
 import { MediaModule } from '@/api/media/media.module';
 import { ShowcaseModule } from '@/api/showcase/showcase.module';
-import { UsersModule } from '@/api/users/users.module';
+import { UserModule } from '@/api/user/user.module';
+import { AuthGuard } from '@/guards/auth.guard';
+import { UserGuard } from '@/guards/user.guard';
 import { RequestLoggingMiddleware } from '@/middleware/logger.middleware';
 import { SharedModule } from '@/shared/shared.module';
 import { ValidationPipe } from '@/validation/validation.pipe';
@@ -21,7 +22,7 @@ import { ValidationPipe } from '@/validation/validation.pipe';
     DatabaseModule,
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
-    UsersModule,
+    UserModule,
     BlogModule,
     FaqModule,
     ContactModule,
@@ -31,6 +32,7 @@ import { ValidationPipe } from '@/validation/validation.pipe';
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },
+    { provide: APP_GUARD, useClass: UserGuard },
     { provide: APP_PIPE, useClass: ValidationPipe },
     JwtService,
   ],
