@@ -22,8 +22,8 @@ export class FaqService {
     }
   }
 
-  findAll() {
-    return this.faqRepository.find();
+  async findAll() {
+    return await this.faqRepository.find();
   }
 
   async update(uuid: string, updateFaqDto: UpdateFaqDto) {
