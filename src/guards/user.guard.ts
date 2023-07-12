@@ -7,7 +7,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { UUID } from 'crypto';
 
-import { UserService } from '@/api/user/user.service';
+import { UserService } from '@/api/user/services/user.service';
 import { ISPUBLICKEY } from '@/common/decorators/auth.public.decorator';
 import { REQUIRESUSERKEY } from '@/common/decorators/require-user.decorator';
 
