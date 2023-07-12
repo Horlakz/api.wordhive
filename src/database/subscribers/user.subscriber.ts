@@ -5,8 +5,8 @@ import type {
 } from 'typeorm';
 import { EventSubscriber } from 'typeorm';
 
-import { AppUtilities } from '@/app.utilities';
 import { User as UserEntity } from '@/api/user/entities/user.entity';
+import { AppUtilities } from '@/app.utilities';
 
 @EventSubscriber()
 export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
