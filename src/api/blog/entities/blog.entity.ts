@@ -1,6 +1,4 @@
-import slugify from 'slugify';
 import {
-  BeforeInsert,
   Column,
   Entity,
   JoinColumn,
@@ -31,9 +29,4 @@ export class Blog extends BaseEntity {
   @ManyToOne(() => BlogCategory)
   @JoinColumn()
   category: BlogCategory;
-
-  @BeforeInsert()
-  async slugifyTitle() {
-    this.slug = slugify(this.title, { lower: true, strict: true });
-  }
 }
