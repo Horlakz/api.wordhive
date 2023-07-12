@@ -1,10 +1,13 @@
 import { Controller, Get, HttpCode, HttpStatus, Req } from '@nestjs/common';
-import { UserService } from './user.service';
+
+import { UserService } from './services/user.service';
+import { RequiresUser } from '@/common/decorators/require-user.decorator';
 
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
 
+  @RequiresUser()
   @HttpCode(HttpStatus.OK)
   @Get()
   async profile(@Req() req) {
