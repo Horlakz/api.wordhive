@@ -1,16 +1,17 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  BadRequestException,
+  Get,
   HttpCode,
   HttpStatus,
+  Param,
   ParseUUIDPipe,
+  Patch,
+  Post,
 } from '@nestjs/common';
+
+import { Public } from '@/common/decorators/auth.public.decorator';
 import { BlogCategoryService as CategoryService } from '../services/category.service';
 
 @Controller('blog-category')
@@ -25,6 +26,7 @@ export class BlogCategoryController {
     return { message: 'Category created successfully' };
   }
 
+  @Public()
   @Get()
   findAll() {
     return this.categoryService.findAll();
