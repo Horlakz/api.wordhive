@@ -14,8 +14,11 @@ export class BlogCommentService {
     private blogService: BlogService,
   ) {}
 
-  async create(createcomment: CreateCommentDto, blog_id): Promise<BlogComment> {
-    const blog = await this.blogService.findOne(blog_id);
+  async create(
+    createcomment: CreateCommentDto,
+    blog_slug,
+  ): Promise<BlogComment> {
+    const blog = await this.blogService.findOneBySlug(blog_slug);
 
     const comment = new BlogComment();
     comment.fullname = createcomment.fullname;
@@ -25,9 +28,9 @@ export class BlogCommentService {
     return this.blogCommentRepository.save(comment);
   }
 
-  async findAllByBlog(uuid: string): Promise<BlogComment[]> {
-    await this.blogService.findOne(uuid);
+  async findAllByBlog(slug: string): Promise<BlogComment[]> {
+    await this.blogService.findOneBySlug(slug);
 
-    return this.blogCommentRepository.find({ where: { blog: { uuid } } });
+    return this.blogCommentRepository.find({ where: { blog: { slug } } });
   }
 }

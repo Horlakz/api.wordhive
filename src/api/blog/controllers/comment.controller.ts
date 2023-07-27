@@ -1,13 +1,11 @@
 import { Public } from '@/common/decorators/auth.public.decorator';
 import {
-  BadRequestException,
   Body,
   Controller,
   Get,
   HttpCode,
   HttpStatus,
   Param,
-  ParseUUIDPipe,
   Post,
 } from '@nestjs/common';
 import { CreateCommentDto } from '../dto/create-comment.dto';
@@ -19,20 +17,20 @@ export class BlogCommentController {
 
   @Public()
   @HttpCode(HttpStatus.CREATED)
-  @Post(':blog_id')
+  @Post(':slug')
   async create(
-    @Param('blog_id', ParseUUIDPipe) blogId: string,
+    @Param('slug') blogSlug: string,
     @Body()
     createCommentDto: CreateCommentDto,
   ) {
-    await this.commentService.create(createCommentDto, blogId);
+    await this.commentService.create(createCommentDto, blogSlug);
 
     return { message: 'Comment created successfully' };
   }
 
   @Public()
-  @Get(':blog_id')
-  async findAllBlogComments(@Param('blog_id', ParseUUIDPipe) blogId: string) {
-    return this.commentService.findAllByBlog(blogId);
+  @Get(':slug')
+  async findAllBlogComments(@Param('slug') blogSlug: string) {
+    return this.commentService.findAllByBlog(blogSlug);
   }
 }
