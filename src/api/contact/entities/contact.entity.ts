@@ -5,13 +5,16 @@ import { BaseEntity } from '@/database/entity/base.entity';
 @Entity()
 export class Contact extends BaseEntity {
   @Column()
-  name: string;
+  fullname: string;
 
   @Column({ unique: true })
   email: string;
 
   @Column()
-  subject: string;
+  phone: string;
+
+  @Column()
+  country: string;
 
   @Column()
   message: string;
