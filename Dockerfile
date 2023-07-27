@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY package.json package.json
 
-RUN yarn
+RUN yarn add express-handlebars
 
 COPY . .
 
