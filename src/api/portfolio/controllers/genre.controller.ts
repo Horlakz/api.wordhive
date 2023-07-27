@@ -15,7 +15,7 @@ import {
 import { Public } from '@/common/decorators/auth.public.decorator';
 import { ShowcaseGenreService as ShowcaseGenreService } from '../services/genre.service';
 
-@Controller('showcase-genre')
+@Controller('portfolio-genre')
 export class ShowcaseGenreController {
   constructor(private readonly showcaseGenreService: ShowcaseGenreService) {}
 

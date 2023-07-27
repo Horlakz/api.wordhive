@@ -14,7 +14,7 @@ import {
 import { ShowcaseFieldService } from '../services/field.service';
 import { Public } from '@/common/decorators/auth.public.decorator';
 
-@Controller('showcase-field')
+@Controller('portfolio-field')
 export class ShowcaseFieldController {
   constructor(private readonly showcaseFieldService: ShowcaseFieldService) {}
 

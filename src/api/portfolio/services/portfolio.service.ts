@@ -8,10 +8,10 @@ import { Repository } from 'typeorm';
 
 import { MediaService } from '@/api/media/media.service';
 import { PaginationDto } from '@/common/dto/pagination.dto';
-import { CreateShowcaseDto } from '../dto/create-showcase.dto';
-import { UpdateShowcaseDto } from '../dto/update-showcase.dto';
+import { CreateShowcaseDto } from '../dto/create-portfolio.dto';
+import { UpdateShowcaseDto } from '../dto/update-portfolio.dto';
 import { ShowcaseGenre } from '../entities/genre.entity';
-import { Showcase } from '../entities/showcase.entity';
+import { Showcase } from '../entities/portfolio.entity';
 import { ShowcaseFieldService } from './field.service';
 import { ShowcaseGenreService } from './genre.service';
 

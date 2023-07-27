@@ -19,11 +19,11 @@ import {
 import { Public } from '@/common/decorators/auth.public.decorator';
 import { PaginationResponseDto } from '@/common/dto/paginationResponse.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { CreateShowcaseDto } from '../dto/create-showcase.dto';
-import { UpdateShowcaseDto } from '../dto/update-showcase.dto';
-import { ShowcaseService } from '../services/showcase.service';
+import { CreateShowcaseDto } from '../dto/create-portfolio.dto';
+import { UpdateShowcaseDto } from '../dto/update-portfolio.dto';
+import { ShowcaseService } from '../services/portfolio.service';
 
-@Controller('showcase')
+@Controller('portfolio')
 export class ShowcaseController {
   constructor(private readonly showcaseService: ShowcaseService) {}
 

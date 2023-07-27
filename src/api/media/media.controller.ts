@@ -8,9 +8,12 @@ export class MediaController {
   constructor(private readonly mediaService: MediaService) {}
 
   @Public()
-  @Get(':key')
-  async streamFile(@Param('key') key: string) {
-    const file = await this.mediaService.stream(key);
+  @Get(':key/:filename')
+  async streamFile(
+    @Param('key') key: string,
+    @Param('filename') filename: string,
+  ) {
+    const file = await this.mediaService.stream(key + '/' + filename);
     return new StreamableFile(file);
   }
 }
