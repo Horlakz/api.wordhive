@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   CanActivate,
   ExecutionContext,
   ForbiddenException,
@@ -43,7 +44,13 @@ export class UserGuard implements CanActivate {
   }
 
   private async isAdmin(uuid: UUID): Promise<boolean> {
-    const user = await this.userService.findByUUID(uuid);
+    let user;
+    try {
+      user = await this.userService.findByUUID(uuid);
+      if (!user) throw new BadRequestException('Error Fetching User');
+    } catch (err) {
+      throw new BadRequestException(err.message);
+    }
     return user.isAdmin;
   }
 }
