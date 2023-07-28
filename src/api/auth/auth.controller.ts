@@ -10,6 +10,7 @@ import {
 import { Public } from '@/common/decorators/auth.public.decorator';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
+import { RegisterUserDto } from './dto/register-user.dto';
 import { RegisterDto } from './dto/register.dto';
 
 enum Template {
@@ -32,7 +33,14 @@ export class AuthController {
   @HttpCode(HttpStatus.CREATED)
   @Public()
   @Post('register')
-  async register(@Body() registerDto: RegisterDto) {
+  async register(@Body() registerDto: RegisterUserDto) {
+    await this.authService.register(registerDto);
+    return { message: 'Verification code sent to email' };
+  }
+
+  @HttpCode(HttpStatus.CREATED)
+  @Post('register-admin')
+  async registerAdmin(@Body() registerDto: RegisterDto) {
     await this.authService.register(registerDto);
     return { message: 'Verification code sent to email' };
   }
