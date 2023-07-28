@@ -57,7 +57,6 @@ export class ShowcaseController {
     file: Express.Multer.File,
     @Body() createShowcaseDto: CreateShowcaseDto,
   ) {
-    console.log(file);
     const { title, body, field, genre } = createShowcaseDto;
     if (!title || !body || !field || !genre)
       throw new BadRequestException('All Fields are required');
