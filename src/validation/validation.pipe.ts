@@ -1,11 +1,13 @@
 import {
   ArgumentMetadata,
+  BadRequestException,
   Injectable,
   PipeTransform,
-  BadRequestException,
 } from '@nestjs/common';
-import { validate } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
+import { validate } from 'class-validator';
+
+import { SKIPVALIDATION } from '@/common/decorators/skip-validation.decorator';
 
 @Injectable()
 export class ValidationPipe implements PipeTransform {
@@ -13,6 +15,15 @@ export class ValidationPipe implements PipeTransform {
     if (!metatype || !this.toValidate(metatype)) {
       return value;
     }
+
+    // Check if the class has the SkipValidation decorator
+    const skipValidation = Reflect.getMetadata(SKIPVALIDATION, metatype);
+    if (skipValidation) {
+      return value;
+    }
+
+    if (value.volumes) return value;
+
     const object = plainToInstance(metatype, value);
     const errors = await validate(object);
     if (errors.length > 0) {
