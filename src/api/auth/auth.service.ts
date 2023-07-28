@@ -63,11 +63,7 @@ export class AuthService {
         throw new BadRequestException('User already exists');
       }
 
-      const newUser = await this.userService.create(
-        registerDto.fullname,
-        registerDto.email,
-        registerDto.password,
-      );
+      const newUser = await this.userService.create(registerDto);
 
       await this.sendVerificationCode(newUser.email, Template.CONFIRM_EMAIL);
     } catch (err) {

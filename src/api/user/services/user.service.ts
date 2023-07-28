@@ -4,6 +4,7 @@ import { UUID } from 'crypto';
 import { Repository } from 'typeorm';
 
 import { User } from '../entities/user.entity';
+import { UserDto } from '../dto/create-user.dto';
 
 @Injectable()
 export class UserService {
@@ -25,11 +26,12 @@ export class UserService {
     return user;
   }
 
-  create(fullname: string, email: string, password: string): Promise<User> {
+  create(userDto: UserDto): Promise<User> {
     const user = new User();
-    user.fullname = fullname;
-    user.email = email;
-    user.password = password;
+    user.fullname = userDto.fullname;
+    user.email = userDto.email;
+    user.password = userDto.password;
+    user.isAdmin = userDto.isAdmin;
 
     return this.usersRepository.save(user);
   }
