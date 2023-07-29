@@ -10,6 +10,7 @@ import { ContactModule } from '@/api/contact/contact.module';
 import { FaqModule } from '@/api/faq/faq.module';
 import { MediaModule } from '@/api/media/media.module';
 import { ShowcaseModule } from '@/api/portfolio/portfolio.module';
+import { ServiceModule } from '@/api/service/service.module';
 import { UserModule } from '@/api/user/user.module';
 import { AuthGuard } from '@/guards/auth.guard';
 import { UserGuard } from '@/guards/user.guard';
@@ -29,6 +30,7 @@ import { ValidationPipe } from '@/validation/validation.pipe';
     ShowcaseModule,
     MediaModule,
     SharedModule,
+    ServiceModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },
