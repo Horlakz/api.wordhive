@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -44,8 +44,14 @@ export class ServiceService {
   }
 
   async findOne(uuid: string) {
-    const service = await this.serviceRepository.findOneBy({ uuid });
-    return service;
+    try {
+      const service = await this.serviceRepository.findOneBy({ uuid });
+      if (!service) throw new Error('Service not found');
+
+      return service;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   async remove(uuid: string) {
