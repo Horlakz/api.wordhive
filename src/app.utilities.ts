@@ -36,4 +36,14 @@ export class AppUtilities {
     }
     return otp;
   }
+
+  public static generateRandomString(length: number = 6): string {
+    const digits = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let digit = '';
+    for (let i = 1; i <= length; i++) {
+      const index = Math.floor(Math.random() * digits.length);
+      digit = digit + digits[index];
+    }
+    return digit;
+  }
 }
