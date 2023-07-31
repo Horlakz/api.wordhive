@@ -1,6 +1,4 @@
-import slugify from 'slugify';
 import {
-  BeforeInsert,
   Column,
   Entity,
   JoinColumn,
@@ -10,11 +8,11 @@ import {
 } from 'typeorm';
 
 import { BaseEntity } from '@/database/entity/base.entity';
-import { ShowcaseField } from './field.entity';
-import { ShowcaseGenre } from './genre.entity';
+import { PortfolioField } from './field.entity';
+import { PortfolioGenre } from './genre.entity';
 
 @Entity()
-export class Showcase extends BaseEntity {
+export class Portfolio extends BaseEntity {
   @Column()
   title: string;
 
@@ -24,11 +22,11 @@ export class Showcase extends BaseEntity {
   @Column()
   image: string;
 
-  @ManyToMany(() => ShowcaseGenre)
+  @ManyToMany(() => PortfolioGenre)
   @JoinTable()
-  genre: ShowcaseGenre[];
+  genre: PortfolioGenre[];
 
-  @ManyToOne(() => ShowcaseField)
+  @ManyToOne(() => PortfolioField)
   @JoinColumn()
-  field: ShowcaseField;
+  field: PortfolioField;
 }

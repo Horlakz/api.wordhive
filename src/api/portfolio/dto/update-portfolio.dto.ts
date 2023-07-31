@@ -1,5 +1,5 @@
 import { PartialType } from '@nestjs/mapped-types';
 
-import { CreateShowcaseDto } from './create-portfolio.dto';
+import { CreatePortfolioDto } from './create-portfolio.dto';
 
-export class UpdateShowcaseDto extends PartialType(CreateShowcaseDto) {}
+export class UpdatePortfolioDto extends PartialType(CreatePortfolioDto) {}

@@ -8,25 +8,25 @@ import { Repository } from 'typeorm';
 
 import { MediaService } from '@/api/media/media.service';
 import { PaginationDto } from '@/common/dto/pagination.dto';
-import { CreateShowcaseDto } from '../dto/create-portfolio.dto';
-import { UpdateShowcaseDto } from '../dto/update-portfolio.dto';
-import { ShowcaseGenre } from '../entities/genre.entity';
-import { Showcase } from '../entities/portfolio.entity';
-import { ShowcaseFieldService } from './field.service';
-import { ShowcaseGenreService } from './genre.service';
+import { CreatePortfolioDto } from '../dto/create-portfolio.dto';
+import { UpdatePortfolioDto } from '../dto/update-portfolio.dto';
+import { PortfolioGenre } from '../entities/genre.entity';
+import { Portfolio } from '../entities/portfolio.entity';
+import { PortfolioFieldService } from './field.service';
+import { PortfolioGenreService } from './genre.service';
 
 @Injectable()
-export class ShowcaseService {
+export class PortfolioService {
   constructor(
-    @InjectRepository(Showcase)
-    private showcaseRepository: Repository<Showcase>,
-    private showcaseGenreService: ShowcaseGenreService,
-    private showcaseFieldService: ShowcaseFieldService,
+    @InjectRepository(Portfolio)
+    private portfolioRepository: Repository<Portfolio>,
+    private showcaseGenreService: PortfolioGenreService,
+    private showcaseFieldService: PortfolioFieldService,
     private mediaService: MediaService,
   ) {}
 
-  async create(createShowcaseDto: CreateShowcaseDto) {
-    const showcase = new Showcase();
+  async create(createShowcaseDto: CreatePortfolioDto) {
+    const showcase = new Portfolio();
     return this.save(showcase, createShowcaseDto);
   }
 
@@ -34,7 +34,7 @@ export class ShowcaseService {
     field?: string,
     genres?: string[],
     paginationDto?: PaginationDto,
-  ): Promise<Showcase[]> {
+  ): Promise<Portfolio[]> {
     const queryBuilder = await this.queryBuilder(field, genres, paginationDto);
 
     return queryBuilder.getMany();
@@ -51,9 +51,9 @@ export class ShowcaseService {
   }
 
   async findOne(uuid: string) {
-    let showcase: Showcase;
+    let showcase: Portfolio;
     try {
-      showcase = await this.showcaseRepository.findOne({
+      showcase = await this.portfolioRepository.findOne({
         where: { uuid },
         relations: { genre: true, field: true },
       });
@@ -64,7 +64,7 @@ export class ShowcaseService {
     return showcase;
   }
 
-  async update(uuid: string, updateBlogDto: UpdateShowcaseDto) {
+  async update(uuid: string, updateBlogDto: UpdatePortfolioDto) {
     const blog = await this.findOne(uuid);
     return this.save(blog, updateBlogDto);
   }
@@ -74,15 +74,15 @@ export class ShowcaseService {
 
     try {
       await this.mediaService.delete(showcase.image);
-      await this.showcaseRepository.softDelete({ uuid });
+      await this.portfolioRepository.softDelete({ uuid });
     } catch (err) {
       throw new BadRequestException(err.message);
     }
   }
 
-  async save(showcase: Showcase, dto: UpdateShowcaseDto): Promise<Showcase> {
-    let newShowcase: Showcase;
-    let genres: ShowcaseGenre[] = [];
+  async save(showcase: Portfolio, dto: UpdatePortfolioDto): Promise<Portfolio> {
+    let newShowcase: Portfolio;
+    let genres: PortfolioGenre[] = [];
     for (let i = 0; i < dto.genre?.length; i++) {
       const tag = await this.showcaseGenreService.findOne(dto.genre[i]);
       if (tag) genres.push(tag);
@@ -99,7 +99,7 @@ export class ShowcaseService {
 
     try {
       await this.mediaService.upload(dto.image);
-      newShowcase = await this.showcaseRepository.save(showcase);
+      newShowcase = await this.portfolioRepository.save(showcase);
     } catch (err) {
       throw new BadRequestException(err.message);
     }
@@ -114,7 +114,7 @@ export class ShowcaseService {
   ) {
     const { limit, page } = paginationDto;
 
-    const queryBuilder = await this.showcaseRepository
+    const queryBuilder = await this.portfolioRepository
       .createQueryBuilder('showcase')
       .leftJoinAndSelect('showcase.genre', 'genre')
       .leftJoinAndSelect('showcase.field', 'field');

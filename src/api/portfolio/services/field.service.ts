@@ -6,46 +6,46 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { ShowcaseField } from '../entities/field.entity';
+import { PortfolioField } from '../entities/field.entity';
 
 @Injectable()
-export class ShowcaseFieldService {
+export class PortfolioFieldService {
   constructor(
-    @InjectRepository(ShowcaseField)
-    private showcaseFieldRepository: Repository<ShowcaseField>,
+    @InjectRepository(PortfolioField)
+    private porfolioFieldRepository: Repository<PortfolioField>,
   ) {}
 
-  async create(name: string): Promise<ShowcaseField> {
-    const field = new ShowcaseField();
+  async create(name: string): Promise<PortfolioField> {
+    const field = new PortfolioField();
     field.name = name;
 
     const checkField = await this.findByName(name);
     if (checkField) throw new BadRequestException('Field already exists');
 
-    return this.showcaseFieldRepository.save(field);
+    return this.porfolioFieldRepository.save(field);
   }
 
-  async findAll(): Promise<ShowcaseField[]> {
-    return this.showcaseFieldRepository.find();
+  async findAll(): Promise<PortfolioField[]> {
+    return this.porfolioFieldRepository.find();
   }
 
-  async findByName(name: string): Promise<ShowcaseField> {
-    return this.showcaseFieldRepository.findOneBy({ name });
+  async findByName(name: string): Promise<PortfolioField> {
+    return this.porfolioFieldRepository.findOneBy({ name });
   }
 
-  async findOne(uuid: string): Promise<ShowcaseField> {
-    const field = await this.showcaseFieldRepository.findOneBy({ uuid });
+  async findOne(uuid: string): Promise<PortfolioField> {
+    const field = await this.porfolioFieldRepository.findOneBy({ uuid });
     if (!field) throw new NotFoundException('Field not found');
     return field;
   }
 
   async update(uuid: string, name: string): Promise<any> {
     await this.findOne(uuid);
-    return this.showcaseFieldRepository.update(uuid, { name: name });
+    return this.porfolioFieldRepository.update(uuid, { name: name });
   }
 
   async remove(uuid: string): Promise<any> {
     await this.findOne(uuid);
-    return this.showcaseFieldRepository.softDelete(uuid);
+    return this.porfolioFieldRepository.softDelete(uuid);
   }
 }

@@ -1,6 +1,6 @@
-import { IsArray, IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import { IsString, IsUUID } from 'class-validator';
 
-export class CreateShowcaseDto {
+export class CreatePortfolioDto {
   @IsString()
   title: string;
 

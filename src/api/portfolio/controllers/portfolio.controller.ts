@@ -19,13 +19,13 @@ import {
 import { Public } from '@/common/decorators/auth.public.decorator';
 import { PaginationResponseDto } from '@/common/dto/paginationResponse.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { CreateShowcaseDto } from '../dto/create-portfolio.dto';
-import { UpdateShowcaseDto } from '../dto/update-portfolio.dto';
-import { ShowcaseService } from '../services/portfolio.service';
+import { CreatePortfolioDto } from '../dto/create-portfolio.dto';
+import { UpdatePortfolioDto } from '../dto/update-portfolio.dto';
+import { PortfolioService } from '../services/portfolio.service';
 
 @Controller('portfolio')
-export class ShowcaseController {
-  constructor(private readonly showcaseService: ShowcaseService) {}
+export class PorfolioController {
+  constructor(private readonly showcaseService: PortfolioService) {}
 
   @Post()
   @UseInterceptors(
@@ -55,7 +55,7 @@ export class ShowcaseController {
         }),
     )
     file: Express.Multer.File,
-    @Body() createShowcaseDto: CreateShowcaseDto,
+    @Body() createShowcaseDto: CreatePortfolioDto,
   ) {
     const { title, body, field, genre } = createShowcaseDto;
     if (!title || !body || !field || !genre)
@@ -102,7 +102,7 @@ export class ShowcaseController {
   // }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBlogDto: UpdateShowcaseDto) {
+  update(@Param('id') id: string, @Body() updateBlogDto: UpdatePortfolioDto) {
     return this.showcaseService.update(id, updateBlogDto);
   }
 

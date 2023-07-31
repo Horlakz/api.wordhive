@@ -2,26 +2,26 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { MediaModule } from '../media/media.module';
-import { ShowcaseFieldController } from './controllers/field.controller';
-import { ShowcaseGenreController } from './controllers/genre.controller';
-import { ShowcaseController } from './controllers/portfolio.controller';
-import { ShowcaseField } from './entities/field.entity';
-import { ShowcaseGenre } from './entities/genre.entity';
-import { Showcase } from './entities/portfolio.entity';
-import { ShowcaseFieldService } from './services/field.service';
-import { ShowcaseGenreService } from './services/genre.service';
-import { ShowcaseService } from './services/portfolio.service';
+import { PortfolioFieldController } from './controllers/field.controller';
+import { PortfolioGenreController } from './controllers/genre.controller';
+import { PorfolioController } from './controllers/portfolio.controller';
+import { PortfolioField } from './entities/field.entity';
+import { PortfolioGenre } from './entities/genre.entity';
+import { Portfolio } from './entities/portfolio.entity';
+import { PortfolioFieldService } from './services/field.service';
+import { PortfolioGenreService } from './services/genre.service';
+import { PortfolioService } from './services/portfolio.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Showcase, ShowcaseField, ShowcaseGenre]),
+    TypeOrmModule.forFeature([Portfolio, PortfolioField, PortfolioGenre]),
     MediaModule,
   ],
   controllers: [
-    ShowcaseController,
-    ShowcaseFieldController,
-    ShowcaseGenreController,
+    PorfolioController,
+    PortfolioFieldController,
+    PortfolioGenreController,
   ],
-  providers: [ShowcaseService, ShowcaseFieldService, ShowcaseGenreService],
+  providers: [PortfolioService, PortfolioFieldService, PortfolioGenreService],
 })
-export class ShowcaseModule {}
+export class PortfolioModule {}
