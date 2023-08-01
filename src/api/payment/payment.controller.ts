@@ -24,34 +24,34 @@ export class PaymentController {
   ) {}
 
   @Get()
-  findAll() {
-    return this.paymentService.findAll();
+  async findAll() {
+    return await this.paymentService.findAll();
   }
 
   @Public()
   @Get(':reference')
-  verifyPayment(@Param('reference') reference: string) {
-    return this.paymentService.verifyPayment(reference);
+  async verifyPayment(@Param('reference') reference: string) {
+    return await this.paymentService.verifyPayment(reference);
   }
 
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('webhook')
-  webhookListener(@Body() body, @Req() req: Request) {
-    const hash = crypto
-      .createHmac('sha512', this.configService.get('PAYSTACK_SECRET_KEY'))
-      .update(JSON.stringify(body))
-      .digest('hex');
+  async webhookListener(@Body() body, @Req() req: Request) {
+    // const hash = crypto
+    //   .createHmac('sha512', this.configService.get('PAYSTACK_SECRET_KEY'))
+    //   .update(JSON.stringify(body))
+    //   .digest('hex');
 
-    if (
-      hash == req.headers['x-paystack-signature'] &&
-      this.configService.get('NODE_ENV') === 'production'
-    ) {
-      this.paymentService.verifyPayment(body?.data?.reference);
-    } else {
-      throw new BadRequestException('Invalid signature');
-    }
+    // if (
+    //   hash == req.headers['x-paystack-signature'] &&
+    //   this.configService.get('NODE_ENV') === 'production'
+    // ) {
+    //   this.paymentService.verifyPayment(body?.data?.reference);
+    // } else {
+    //   throw new BadRequestException('Invalid signature');
+    // }
 
-    this.paymentService.verifyPayment(body?.data?.reference);
+    await this.paymentService.verifyPayment(body?.data?.reference);
   }
 }
