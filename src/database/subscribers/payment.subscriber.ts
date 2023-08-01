@@ -31,7 +31,6 @@ export class PaymentSubscriber
     const order = await event.queryRunner.manager.findOne(OrderEntity, {
       where: { paymentInfo: payment },
     });
-    console.log(order);
 
     if (payment.status === 'SUCCESS') {
       order.status = 'PROCESSING';
