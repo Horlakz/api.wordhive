@@ -43,10 +43,15 @@ export class PaymentController {
       .update(JSON.stringify(body))
       .digest('hex');
 
-    if (hash == req.headers['x-paystack-signature']) {
+    if (
+      hash == req.headers['x-paystack-signature'] &&
+      this.configService.get('NODE_ENV') === 'production'
+    ) {
       this.paymentService.verifyPayment(body?.data?.reference);
+    } else {
+      throw new BadRequestException('Invalid signature');
     }
 
-    throw new BadRequestException('Invalid signature');
+    this.paymentService.verifyPayment(body?.data?.reference);
   }
 }
