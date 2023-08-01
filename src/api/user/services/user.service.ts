@@ -31,8 +31,7 @@ export class UserService {
     user.fullname = userDto.fullname;
     user.email = userDto.email;
     user.password = userDto.password;
-    // user.isAdmin = userDto.isAdmin;
-    user.isEmailVerified = true;
+    user.isAdmin = userDto.isAdmin;
 
     return this.usersRepository.save(user);
   }

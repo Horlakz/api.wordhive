@@ -65,7 +65,7 @@ export class AuthService {
 
       const newUser = await this.userService.create(registerDto);
 
-      // await this.sendVerificationCode(newUser.email, Template.CONFIRM_EMAIL);
+      await this.sendVerificationCode(newUser.email, Template.CONFIRM_EMAIL);
     } catch (err) {
       throw new BadRequestException(err?.message);
     }
