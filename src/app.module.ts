@@ -9,7 +9,9 @@ import { BlogModule } from '@/api/blog/blog.module';
 import { ContactModule } from '@/api/contact/contact.module';
 import { FaqModule } from '@/api/faq/faq.module';
 import { MediaModule } from '@/api/media/media.module';
-import { ShowcaseModule } from '@/api/portfolio/portfolio.module';
+import { OrderModule } from '@/api/order/order.module';
+import { PaymentModule } from '@/api/payment/payment.module';
+import { PortfolioModule } from '@/api/portfolio/portfolio.module';
 import { ServiceModule } from '@/api/service/service.module';
 import { UserModule } from '@/api/user/user.module';
 import { AuthGuard } from '@/guards/auth.guard';
@@ -27,10 +29,12 @@ import { ValidationPipe } from '@/validation/validation.pipe';
     BlogModule,
     FaqModule,
     ContactModule,
-    ShowcaseModule,
+    PortfolioModule,
     MediaModule,
     SharedModule,
     ServiceModule,
+    OrderModule,
+    PaymentModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: AuthGuard },
