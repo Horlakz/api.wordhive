@@ -30,9 +30,8 @@ export class PaystackService {
         ...data,
         amount: amount * 100,
       });
-      console.log(response);
 
-      return response.data;
+      return response?.data;
     } catch (e) {
       throw new BadRequestException(e.response.data.message || e.message);
     }
@@ -40,10 +39,10 @@ export class PaystackService {
 
   async verify(reference: string) {
     try {
-      const { data } = await this.httpService.axiosRef.get(
+      const response = await this.httpService.axiosRef.get(
         `/verify/${reference}`,
       );
-      return data;
+      return response?.data;
     } catch (e) {
       throw new BadRequestException(e.response.data.message || e.message);
     }
