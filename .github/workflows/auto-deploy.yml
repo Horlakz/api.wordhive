@@ -16,23 +16,25 @@ jobs:
         uses: SpicyPizza/create-envfile@v1.3
         with:
           envkey_CORS_ORIGIN: ${{ secrets.CORS_ORIGIN }}
-          envkey_JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          envkey_JWT_EXPIRES_IN: ${{ secrets.JWT_EXPIRES_IN }}
-          envkey_EMAIL: ${{ secrets.EMAIL }}
-          envkey_EMAIL_USER: ${{ secrets.EMAIL_USER }}
-          envkey_EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-          envkey_AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
-          envkey_AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
-          envkey_AWS_BUCKET_REGION: ${{ secrets.AWS_BUCKET_REGION }}
-          envkey_AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
-          envkey_AWS_BUCKET_BASE_FOLDER: ${{ secrets.AWS_BUCKET_BASE_FOLDER }}
-          envkey_PAYSTACK_SECRET_KEY: ${{ secrets.PAYSTACK_SECRET_KEY }}
+          envkey_FRONTEND_BASE_URL: ${{ secrets.FRONTEND_BASE_URL }}
+          envkey_DB_PORT: ${{ secrets.DB_PORT }}
+          envkey_DB_NAME: ${{ secrets.DB_NAME }}
+          envkey_DB_HOST: ${{ secrets.DB_HOST }}
           envkey_DB_USERNAME: ${{ secrets.DB_USERNAME }}
           envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          envkey_DB_HOST: ${{ secrets.DB_HOST }}
-          envkey_DB_NAME: ${{ secrets.DB_NAME }}
-          envkey_DB_PORT: ${{ secrets.DB_PORT }}
           envkey_DB_SSL: ${{ secrets.DB_SSL }}
+          envkey_JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          envkey_JWT_EXPIRES_IN: ${{ secrets.JWT_EXPIRES_IN }}
+          envkey_AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+          envkey_AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+          envkey_AWS_BUCKET_REGION: ${{ secrets.AWS_BUCKET_REGION }}
+          envkey_AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
+          envkey_AWS_BUCKET_BASE_FOLDER: ${{ secrets.AWS_BUCKET_BASE_FOLDER }}
+          envkey_EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+          envkey_EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
+          envkey_EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          envkey_EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+          envkey_PAYSTACK_SECRET_KEY: ${{ secrets.PAYSTACK_SECRET_KEY }}
       - name: Build Docker images
         run: |
           docker build . -t wordhive-api:${{ github.sha }}
