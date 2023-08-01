@@ -3,8 +3,9 @@ import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { BaseSubscriber } from './subscribers/base.subscriber';
-import { UserSubscriber } from './subscribers/user.subscriber';
 import { BlogSubscriber } from './subscribers/blog.subscriber';
+import { PaymentSubscriber } from './subscribers/payment.subscriber';
+import { UserSubscriber } from './subscribers/user.subscriber';
 
 @Module({
   imports: [
@@ -17,7 +18,12 @@ import { BlogSubscriber } from './subscribers/blog.subscriber';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        subscribers: [BaseSubscriber, UserSubscriber, BlogSubscriber],
+        subscribers: [
+          BaseSubscriber,
+          UserSubscriber,
+          BlogSubscriber,
+          PaymentSubscriber,
+        ],
         autoLoadEntities: true,
         synchronize: true,
         ssl: configService.get('DB_SSL') === 'true',
