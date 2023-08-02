@@ -41,7 +41,7 @@ export class OrderService {
           reference: paymentReference,
         },
         user,
-        '/order/success',
+        '/services/confirm-order',
       );
 
       const order = new Order();
