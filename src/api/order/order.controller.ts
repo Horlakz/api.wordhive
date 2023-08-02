@@ -15,6 +15,7 @@ import { RequiresUser } from '@/common/decorators/require-user.decorator';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrderService } from './order.service';
+import { Public } from '@/common/decorators/auth.public.decorator';
 
 @Controller('order')
 export class OrderController {
@@ -43,6 +44,7 @@ export class OrderController {
     return this.orderService.findAll(reference);
   }
 
+  @Public()
   @Get('verify/:reference')
   async verify(@Param('reference') reference: string) {
     const payment = await this.paymentService.verifyPayment(reference);
