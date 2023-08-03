@@ -106,6 +106,7 @@ export class OrderService {
     const queryBuilder = this.orderRepository
       .createQueryBuilder('order')
       .leftJoinAndSelect('order.user', 'user')
+      .leftJoinAndSelect('order.service', 'service')
       .leftJoinAndSelect('order.paymentInfo', 'paymentInfo')
       .select([
         'order',
@@ -114,6 +115,7 @@ export class OrderService {
         'paymentInfo.reference',
         'paymentInfo.amount',
         'paymentInfo.status',
+        'service.title',
       ]);
 
     return queryBuilder;
