@@ -33,7 +33,7 @@ export class PaymentSubscriber
     });
 
     if (payment.status === 'SUCCESS') {
-      order.status = 'PROCESSING';
+      order.status = 'CONFIRMED';
       await event.queryRunner.manager.save(order);
     }
 

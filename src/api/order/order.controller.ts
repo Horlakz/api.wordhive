@@ -51,7 +51,7 @@ export class OrderController {
     const order = await this.orderService.findOneByPaymentReference(reference);
 
     if (payment.status === 'success') {
-      await this.orderService.update(order.uuid, { status: 'PROCESSING' });
+      await this.orderService.update(order.uuid, { status: 'CONFIRMED' });
     }
 
     if (payment.status === 'failed') {
