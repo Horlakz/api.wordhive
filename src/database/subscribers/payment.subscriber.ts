@@ -34,11 +34,15 @@ export class PaymentSubscriber
 
     if (payment.status === 'SUCCESS') {
       order.status = 'CONFIRMED';
+      order.awaitingConfirmation.status = true;
+      order.awaitingConfirmation.timestamp = new Date();
       await event.queryRunner.manager.save(order);
     }
 
     if (payment.status === 'FAILED') {
       order.status = 'FAILED';
+      order.awaitingConfirmation.status = false;
+      order.awaitingConfirmation.timestamp = new Date();
       await event.queryRunner.manager.save(order);
     }
 

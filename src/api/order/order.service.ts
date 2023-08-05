@@ -95,6 +95,7 @@ export class OrderService {
   }
 
   async update(id: string, updateOrderDto: UpdateOrderDto) {
+    await this.updateEntityWithStatus(id, updateOrderDto.status);
     await this.orderRepository.update({ uuid: id }, updateOrderDto);
   }
 
@@ -120,5 +121,53 @@ export class OrderService {
       .orderBy('order.created_at', 'DESC');
 
     return queryBuilder;
+  }
+
+  async updateEntityWithStatus(id: string, status: string) {
+    const order = await this.orderRepository.findOneBy({ uuid: id });
+
+    const date = new Date();
+    switch (status) {
+      case 'CONFIRMED':
+        order.awaitingConfirmation = {
+          name: 'Awaiting Confirmation',
+          status: true,
+          timestamp: date,
+        };
+        this.orderRepository.save(order);
+        break;
+      case 'IN_PROGRESS':
+        order.workInProgress = {
+          name: 'Work in Progress',
+          status: true,
+          timestamp: date,
+        };
+        this.orderRepository.save(order);
+        break;
+      case 'COMPLETED':
+        order.sentOut = {
+          name: 'Out for delivery',
+          status: true,
+          timestamp: date,
+        };
+        this.orderRepository.save(order);
+        break;
+      case 'DELIVERED':
+        order.delivered = {
+          name: 'Delivered',
+          status: true,
+          timestamp: date,
+        };
+        this.orderRepository.save(order);
+        break;
+      default:
+        order.awaitingConfirmation = {
+          name: 'Awaiting Confirmation',
+          status: false,
+          timestamp: date,
+        };
+        this.orderRepository.save(order);
+        break;
+    }
   }
 }

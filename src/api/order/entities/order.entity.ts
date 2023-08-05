@@ -1,16 +1,9 @@
-import {
-  Entity,
-  Column,
-  JoinColumn,
-  ManyToOne,
-  OneToOne,
-  AfterUpdate,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from 'typeorm';
 
-import { BaseEntity } from '@/database/entity/base.entity';
 import { Payment } from '@/api/payment/entities/payment.entity';
-import { User } from '@/api/user/entities/user.entity';
 import { Service } from '@/api/service/entities/service.entity';
+import { User } from '@/api/user/entities/user.entity';
+import { BaseEntity } from '@/database/entity/base.entity';
 
 interface StatusDetails<T> {
   name: T;
@@ -91,46 +84,4 @@ export class Order extends BaseEntity {
     default: { name: 'Delivered', status: false },
   })
   delivered: StatusDetails<'Delivered'>;
-
-  @AfterUpdate()
-  updateStatus() {
-    const date = new Date();
-    switch (this.status) {
-      case 'CONFIRMED':
-        this.awaitingConfirmation = {
-          name: 'Awaiting Confirmation',
-          status: true,
-          timestamp: date,
-        };
-        break;
-      case 'IN_PROGRESS':
-        this.workInProgress = {
-          name: 'Work in Progress',
-          status: true,
-          timestamp: date,
-        };
-        break;
-
-      case 'COMPLETED':
-        this.sentOut = {
-          name: 'Out for delivery',
-          status: true,
-          timestamp: date,
-        };
-        break;
-      case 'DELIVERED':
-        this.delivered = {
-          name: 'Delivered',
-          status: true,
-          timestamp: date,
-        };
-        break;
-      default:
-        this.awaitingConfirmation = {
-          name: 'Awaiting Confirmation',
-          status: false,
-          timestamp: date,
-        };
-    }
-  }
 }
