@@ -116,7 +116,8 @@ export class OrderService {
         'paymentInfo.amount',
         'paymentInfo.status',
         'service.title',
-      ]);
+      ])
+      .orderBy('order.created_at', 'DESC');
 
     return queryBuilder;
   }
