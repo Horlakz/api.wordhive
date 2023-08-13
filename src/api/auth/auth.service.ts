@@ -31,7 +31,7 @@ export class AuthService {
   private payload: { sub: string };
   private code: string;
 
-  async login(loginDto: LoginDto): Promise<string> {
+  async login(loginDto: LoginDto): Promise<Record<string, string | boolean>> {
     try {
       const user = await this.userService.findOne(loginDto.email);
       if (!user) throw new NotFoundException('User not found');
@@ -47,13 +47,12 @@ export class AuthService {
         throw new UnauthorizedException('Passwords do not match');
 
       this.payload = { sub: user.uuid };
+      const accessToken = await this.jwtService.signAsync(this.payload);
+
+      return { accessToken, isAdmin: user.isAdmin };
     } catch (err) {
       throw new BadRequestException(err?.message);
     }
-
-    const accessToken = await this.jwtService.signAsync(this.payload);
-
-    return accessToken;
   }
 
   async register(registerDto: RegisterDto): Promise<void> {

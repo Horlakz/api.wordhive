@@ -27,7 +27,11 @@ export class AuthController {
   @Post('login')
   async login(@Body() loginDto: LoginDto) {
     const token = await this.authService.login(loginDto);
-    return { message: 'Login Successful', access_token: token };
+    return {
+      message: 'Login Successful',
+      access_token: token.access_token,
+      is_admin: token.isAdmin,
+    };
   }
 
   @HttpCode(HttpStatus.CREATED)
