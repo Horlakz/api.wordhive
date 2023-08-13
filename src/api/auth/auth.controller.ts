@@ -29,7 +29,7 @@ export class AuthController {
     const token = await this.authService.login(loginDto);
     return {
       message: 'Login Successful',
-      access_token: token.access_token,
+      access_token: token.accessToken,
       is_admin: token.isAdmin,
     };
   }
