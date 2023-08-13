@@ -21,6 +21,10 @@ export class UserController {
     const user = await this.userService.findByUUID(req.user.sub);
     if (!user) throw new BadRequestException('User not found');
 
-    return { email: user.email, fullname: user.fullname };
+    return {
+      email: user.email,
+      fullname: user.fullname,
+      is_admin: user.isAdmin,
+    };
   }
 }
