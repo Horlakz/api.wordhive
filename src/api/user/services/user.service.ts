@@ -13,8 +13,18 @@ export class UserService {
     private usersRepository: Repository<User>,
   ) {}
 
-  findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+  findAll(query?: { isAdmin: boolean }): Promise<User[]> {
+    return this.usersRepository.find({
+      select: [
+        'uuid',
+        'fullname',
+        'email',
+        'isAdmin',
+        'isEmailVerified',
+        'created_at',
+      ],
+      where: { isAdmin: query?.isAdmin },
+    });
   }
 
   findOne(email: string): Promise<User> {

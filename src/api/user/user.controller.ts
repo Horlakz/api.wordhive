@@ -4,6 +4,8 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
+  ParseUUIDPipe,
   Req,
 } from '@nestjs/common';
 
@@ -25,6 +27,30 @@ export class UserController {
       email: user.email,
       fullname: user.fullname,
       is_admin: user.isAdmin,
+    };
+  }
+
+  @Get('all')
+  async getAllUsers() {
+    const users = await this.userService.findAll();
+    return users;
+  }
+
+  @Get('admin')
+  async getAllAdmins() {
+    const users = await this.userService.findAll({ isAdmin: true });
+    return users;
+  }
+
+  @Get(':uuid')
+  async getUserByUUID(@Param('uuid', ParseUUIDPipe) uuid) {
+    const user = await this.userService.findByUUID(uuid);
+    if (!user) throw new BadRequestException('User not found');
+
+    return {
+      email: user.email,
+      fullname: user.fullname,
+      createdAt: user.created_at,
     };
   }
 }
