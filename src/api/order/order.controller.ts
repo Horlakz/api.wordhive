@@ -39,6 +39,13 @@ export class OrderController {
     return orders;
   }
 
+  @Get('user/:user_id')
+  async userOrdersByAdmin(@Param('user_id') userId: string) {
+    const orders = this.orderService.findAllByUser(userId);
+
+    return orders;
+  }
+
   @Get('all')
   findAll(@Query('reference') reference: string) {
     return this.orderService.findAll(reference);
