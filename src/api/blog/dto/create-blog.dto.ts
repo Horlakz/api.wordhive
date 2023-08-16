@@ -1,4 +1,4 @@
-import { IsString, IsArray, IsNotEmpty, IsUUID } from 'class-validator';
+import { IsEmpty, IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 export class CreateBlogDto {
   @IsString()
@@ -9,8 +9,8 @@ export class CreateBlogDto {
   @IsNotEmpty()
   body: string;
 
-  @IsNotEmpty()
-  @IsUUID('all', { each: true })
+  @IsEmpty()
+  // @IsUUID('all', { each: true })
   tags: string[];
 
   @IsNotEmpty()
