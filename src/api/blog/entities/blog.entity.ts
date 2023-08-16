@@ -19,7 +19,7 @@ export class Blog extends BaseEntity {
   @Column()
   title: string;
 
-  @Column({ length: 255 })
+  @Column({ length: 2048 })
   body: string;
 
   @ManyToMany(() => BlogTag)
