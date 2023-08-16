@@ -55,7 +55,7 @@ export class PortfolioService {
     try {
       showcase = await this.portfolioRepository.findOne({
         where: { uuid },
-        relations: { genre: true, field: true },
+        relations: { genres: true, field: true },
       });
       if (!showcase) throw new NotFoundException('Showcase not found');
     } catch (error) {
@@ -93,7 +93,7 @@ export class PortfolioService {
 
     showcase.title = dto.title;
     showcase.body = dto.body;
-    showcase.genre = genres;
+    showcase.genres = genres;
     showcase.field = field;
     showcase.image = image;
 
