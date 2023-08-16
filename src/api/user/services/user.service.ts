@@ -57,4 +57,8 @@ export class UserService {
     user.password = password;
     await this.usersRepository.save(user);
   }
+
+  async remove(user: User): Promise<void> {
+    await this.usersRepository.softRemove(user);
+  }
 }

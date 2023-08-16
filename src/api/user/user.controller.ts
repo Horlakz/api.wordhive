@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -52,5 +53,14 @@ export class UserController {
       fullname: user.fullname,
       createdAt: user.created_at,
     };
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete(':uuid')
+  async removeUserByUUID(@Param('uuid', ParseUUIDPipe) uuid) {
+    const user = await this.userService.findByUUID(uuid);
+    if (!user) throw new BadRequestException('User not found');
+
+    await this.userService.remove(user);
   }
 }
