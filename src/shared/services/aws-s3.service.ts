@@ -34,10 +34,10 @@ export class AwsS3Service {
       Body: file.buffer,
       Key: this.generateKey(file.originalname),
     };
-
     const command = new PutObjectCommand(uploadParams);
+    await this.s3.send(command);
 
-    return await this.s3.send(command);
+    return uploadParams.Key;
   }
 
   async stream(fileKey: string) {
