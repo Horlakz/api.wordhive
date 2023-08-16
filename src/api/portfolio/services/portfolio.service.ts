@@ -116,7 +116,7 @@ export class PortfolioService {
 
     const queryBuilder = await this.portfolioRepository
       .createQueryBuilder('showcase')
-      .leftJoinAndSelect('showcase.genre', 'genre')
+      .leftJoinAndSelect('showcase.genres', 'genre')
       .leftJoinAndSelect('showcase.field', 'field');
 
     if (field) {
@@ -125,7 +125,7 @@ export class PortfolioService {
 
     if (genres && genres.length > 0) {
       queryBuilder
-        .leftJoin('showcase.genre', 'genre')
+        .leftJoin('showcase.genres', 'genre')
         .andWhere('genre.uuid IN (:...genre)', { genres });
     }
 
