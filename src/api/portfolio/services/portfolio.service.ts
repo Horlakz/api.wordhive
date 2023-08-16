@@ -83,22 +83,21 @@ export class PortfolioService {
   async save(showcase: Portfolio, dto: UpdatePortfolioDto): Promise<Portfolio> {
     let newShowcase: Portfolio;
     let genres: PortfolioGenre[] = [];
-    for (let i = 0; i < dto.genre?.length; i++) {
-      const tag = await this.showcaseGenreService.findOne(dto.genre[i]);
-      if (tag) genres.push(tag);
-    }
-
-    const field = await this.showcaseFieldService.findOne(dto.field);
-    const image = this.mediaService.generateKey(dto.image.originalname);
-
-    showcase.title = dto.title;
-    showcase.body = dto.body;
-    showcase.genres = genres;
-    showcase.field = field;
-    showcase.image = image;
-
     try {
-      await this.mediaService.upload(dto.image);
+      for (let i = 0; i < dto.genre?.length; i++) {
+        const genre = await this.showcaseGenreService.findOne(dto.genre[i]);
+        if (genre) genres.push(genre);
+      }
+
+      const field = await this.showcaseFieldService.findOne(dto.field);
+      const image = await this.mediaService.upload(dto.image);
+
+      showcase.title = dto.title;
+      showcase.body = dto.body;
+      showcase.genres = genres;
+      showcase.field = field;
+      showcase.image = image;
+
       newShowcase = await this.portfolioRepository.save(showcase);
     } catch (err) {
       throw new BadRequestException(err.message);
