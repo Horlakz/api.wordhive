@@ -58,10 +58,22 @@ export class PorfolioController {
     @Body() createShowcaseDto: CreatePortfolioDto,
   ) {
     const { title, body, field, genre } = createShowcaseDto;
-    if (!title || !body || !field || !genre)
+    if (!title || !body || !field)
       throw new BadRequestException('All Fields are required');
 
+    let genres: string[] = [];
+    // check if genre is an array
+    if (genre) {
+      if (typeof genre === 'string') {
+        genres.push(genre);
+      } else {
+        genres = genre;
+      }
+    }
+
+    createShowcaseDto.genre = genres;
     createShowcaseDto.image = file;
+
     return this.showcaseService.create(createShowcaseDto);
   }
 
