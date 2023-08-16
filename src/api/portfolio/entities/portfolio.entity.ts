@@ -24,7 +24,7 @@ export class Portfolio extends BaseEntity {
 
   @ManyToMany(() => PortfolioGenre)
   @JoinTable()
-  genre: PortfolioGenre[];
+  genres: PortfolioGenre[];
 
   @ManyToOne(() => PortfolioField)
   @JoinColumn()
