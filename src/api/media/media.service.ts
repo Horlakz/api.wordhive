@@ -19,8 +19,4 @@ export class MediaService {
   async delete(fileKey: string) {
     return await this.awsS3Service.delete(fileKey);
   }
-
-  generateKey(originalName: string) {
-    return this.awsS3Service.generateKey(originalName);
-  }
 }
