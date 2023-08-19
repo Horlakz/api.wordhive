@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -75,8 +77,11 @@ export class OrderController {
     return payment;
   }
 
+  @HttpCode(HttpStatus.ACCEPTED)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
-    return this.orderService.update(id, updateOrderDto);
+  async update(@Param('id') id: any, @Body() updateOrderDto: UpdateOrderDto) {
+    await this.orderService.update(id, updateOrderDto);
+
+    return { message: 'Order updated successfully' };
   }
 }
