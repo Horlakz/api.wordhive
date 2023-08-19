@@ -51,6 +51,13 @@ export class OrderController {
     return this.orderService.findAll(reference);
   }
 
+  @Get(':reference')
+  async findOne(@Param('reference') reference: string) {
+    const order = await this.orderService.findOne(reference);
+
+    return order;
+  }
+
   @Public()
   @Get('verify/:reference')
   async verify(@Param('reference') reference: string) {
