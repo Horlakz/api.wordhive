@@ -9,12 +9,15 @@ import { AppUtilities } from '@/app.utilities';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { Order } from './entities/order.entity';
+import { MailOptions } from '@/common/interfaces/mail-options';
+import { EmailService } from '@/shared/services/email.service';
 
 @Injectable()
 export class OrderService {
   constructor(
     @InjectRepository(Order)
     private readonly orderRepository: Repository<Order>,
+    private readonly emailService: EmailService,
     private paymentService: PaymentService,
     private userService: UserService,
     private serviceService: ServiceService,
@@ -133,7 +136,17 @@ export class OrderService {
   }
 
   async updateEntityWithStatus(id: string, status: string) {
-    const order = await this.orderRepository.findOneBy({ uuid: id });
+    const order = await this.orderRepository.findOne({
+      where: { uuid: id },
+      relations: ['user'],
+    });
+    let options: Partial<MailOptions> = {
+      to: order.user.email,
+      context: {
+        name: order.user.fullname,
+        reference: order.reference,
+      },
+    };
 
     const date = new Date();
     switch (status) {
@@ -151,6 +164,9 @@ export class OrderService {
           status: true,
           timestamp: date,
         };
+        options.subject = 'Order Confirmation successful';
+        options.template = 'order-confirmed';
+        await this.emailService.sendEmail(options as MailOptions);
         this.orderRepository.save(order);
         break;
       case 'COMPLETED':
@@ -159,6 +175,14 @@ export class OrderService {
           status: true,
           timestamp: date,
         };
+        const mailOptions = {
+          ...options,
+          subject: 'Order Completed',
+          template: 'order-completed',
+          context: { id: order.uuid },
+        };
+
+        await this.emailService.sendEmail(mailOptions as MailOptions);
         this.orderRepository.save(order);
         break;
       case 'DELIVERED':
@@ -167,6 +191,9 @@ export class OrderService {
           status: true,
           timestamp: date,
         };
+        options.subject = 'Order Delivered Successfully';
+        options.template = 'order-success';
+        await this.emailService.sendEmail(options as MailOptions);
         this.orderRepository.save(order);
         break;
       default:
