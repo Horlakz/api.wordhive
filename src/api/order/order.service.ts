@@ -86,6 +86,14 @@ export class OrderService {
     return await queryBuilder.getOne();
   }
 
+  async findOneById(id: string) {
+    const queryBuilder = this.queryBuilder();
+
+    queryBuilder.where('order.uuid = :id', { id });
+
+    return await queryBuilder.getOne();
+  }
+
   async findOneByPaymentReference(reference: string) {
     const queryBuilder = this.queryBuilder();
 
