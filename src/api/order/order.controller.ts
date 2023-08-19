@@ -1,7 +1,7 @@
 import {
+  BadRequestException,
   Body,
   Controller,
-  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -13,11 +13,11 @@ import {
 } from '@nestjs/common';
 
 import { PaymentService } from '@/api/payment/payment.service';
+import { Public } from '@/common/decorators/auth.public.decorator';
 import { RequiresUser } from '@/common/decorators/require-user.decorator';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrderService } from './order.service';
-import { Public } from '@/common/decorators/auth.public.decorator';
 
 @Controller('order')
 export class OrderController {
@@ -77,9 +77,26 @@ export class OrderController {
     return payment;
   }
 
+  @Public()
+  @Patch('confirm-delivery/:id')
+  async confirmDelivery(@Param('id') id: string) {
+    const order = await this.orderService.findOneById(id);
+
+    if (order.status !== 'COMPLETED') {
+      throw new BadRequestException('Order is not completed');
+    }
+
+    await this.orderService.update(id, { status: 'DELIVERED' });
+
+    return { message: 'Order updated successfully' };
+  }
+
   @HttpCode(HttpStatus.ACCEPTED)
   @Patch(':id')
-  async update(@Param('id') id: any, @Body() updateOrderDto: UpdateOrderDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateOrderDto: UpdateOrderDto,
+  ) {
     await this.orderService.update(id, updateOrderDto);
 
     return { message: 'Order updated successfully' };
