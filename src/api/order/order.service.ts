@@ -117,6 +117,7 @@ export class OrderService {
         'paymentInfo.amount',
         'paymentInfo.status',
         'service.title',
+        'service.body',
       ])
       .orderBy('order.created_at', 'DESC');
 
