@@ -86,6 +86,9 @@ export class AuthService {
       }
 
       this.code = await this.verifCodeService.createVerificationCode(email);
+
+      const code = [...this.code];
+
       const options: MailOptions = {
         to: email,
         subject:
@@ -93,10 +96,7 @@ export class AuthService {
             ? 'Verification Code'
             : 'Reset Password Code',
         template: type,
-        context: {
-          name: user.fullname,
-          code: this.code,
-        },
+        context: { name: user.fullname, code },
       };
 
       await this.emailService.sendEmail(options);
