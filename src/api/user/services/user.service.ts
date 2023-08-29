@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 
 import { User } from '../entities/user.entity';
 import { UserDto } from '../dto/create-user.dto';
+import { PaginationDto } from '@/common/dto/pagination.dto';
 
 @Injectable()
 export class UserService {
@@ -13,7 +14,13 @@ export class UserService {
     private usersRepository: Repository<User>,
   ) {}
 
-  findAll(query?: { isAdmin: boolean; name: string }): Promise<User[]> {
+  async findAll(query?: {
+    isAdmin: boolean;
+    name: string;
+    pagination?: PaginationDto;
+  }): Promise<{ data: User[]; total: number }> {
+    const { page, limit } = query.pagination;
+
     const queryBuilder = this.usersRepository
       .createQueryBuilder('user')
       .select([
@@ -32,7 +39,12 @@ export class UserService {
       });
     }
 
-    return queryBuilder.getMany();
+    const [data, total] = await queryBuilder
+      .skip(limit * (page - 1))
+      .take(limit)
+      .getManyAndCount();
+
+    return { data, total };
   }
 
   findOne(email: string): Promise<User> {

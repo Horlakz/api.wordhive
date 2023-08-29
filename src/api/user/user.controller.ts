@@ -7,10 +7,12 @@ import {
   HttpStatus,
   Param,
   ParseUUIDPipe,
+  Query,
   Req,
 } from '@nestjs/common';
 
 import { RequiresUser } from '@/common/decorators/require-user.decorator';
+import { PaginationResponseDto } from '@/common/dto/paginationResponse.dto';
 import { UserService } from './services/user.service';
 
 @Controller('user')
@@ -32,14 +34,35 @@ export class UserController {
   }
 
   @Get('all')
-  async getAllUsers() {
-    const users = await this.userService.findAll();
-    return users;
+  async getAllUsers(
+    @Query('name') name: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ) {
+    const pagination = { page, limit };
+
+    const { data, total } = await this.userService.findAll({
+      isAdmin: false,
+      name,
+      pagination,
+    });
+
+    const response: PaginationResponseDto<(typeof data)[0]> = {
+      results: data,
+      pagination: {
+        total: total,
+        page: Number(pagination.page),
+        limit: Number(pagination.limit),
+        totalPages: Math.ceil(total / pagination.limit),
+      },
+    };
+
+    return response;
   }
 
   @Get('admin')
-  async getAllAdmins() {
-    const users = await this.userService.findAll({ isAdmin: true });
+  async getAllAdmins(@Query('name') name: string) {
+    const users = await this.userService.findAll({ isAdmin: true, name });
     return users;
   }
 
