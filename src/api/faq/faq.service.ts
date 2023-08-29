@@ -15,7 +15,9 @@ export class FaqService {
 
   async create(createFaqDto: CreateFaqDto) {
     try {
-      const faq = await this.faqRepository.create(createFaqDto);
+      const faq = new Faq();
+      faq.question = createFaqDto.question;
+      faq.answer = createFaqDto.answer;
       return await this.faqRepository.save(faq);
     } catch (error) {
       throw new BadRequestException(error.message);
