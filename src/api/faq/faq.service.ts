@@ -24,8 +24,17 @@ export class FaqService {
     }
   }
 
-  async findAll() {
-    return await this.faqRepository.find();
+  async findAll(searchTerm: string) {
+    const queryBuilder = this.faqRepository.createQueryBuilder('faq');
+    if (searchTerm) {
+      queryBuilder.where(
+        'faq.question LIKE :searchTerm OR faq.answer LIKE :searchTerm',
+        {
+          searchTerm: `%${searchTerm}%`,
+        },
+      );
+    }
+    return await queryBuilder.getMany();
   }
 
   async update(uuid: string, updateFaqDto: UpdateFaqDto) {
