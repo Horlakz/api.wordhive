@@ -13,18 +13,26 @@ export class UserService {
     private usersRepository: Repository<User>,
   ) {}
 
-  findAll(query?: { isAdmin: boolean }): Promise<User[]> {
-    return this.usersRepository.find({
-      select: [
-        'uuid',
-        'fullname',
-        'email',
-        'isAdmin',
-        'isEmailVerified',
-        'created_at',
-      ],
-      where: { isAdmin: query?.isAdmin },
-    });
+  findAll(query?: { isAdmin: boolean; name: string }): Promise<User[]> {
+    const queryBuilder = this.usersRepository
+      .createQueryBuilder('user')
+      .select([
+        'user.uuid',
+        'user.fullname',
+        'user.email',
+        'user.isAdmin',
+        'user.isEmailVerified',
+        'user.created_at',
+      ])
+      .where('user.isAdmin = :isAdmin', { isAdmin: query?.isAdmin });
+
+    if (query?.name) {
+      queryBuilder.andWhere('user.fullname LIKE :name', {
+        name: `%${query.name}%`,
+      });
+    }
+
+    return queryBuilder.getMany();
   }
 
   findOne(email: string): Promise<User> {
