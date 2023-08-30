@@ -15,6 +15,8 @@ import { Public } from '@/common/decorators/auth.public.decorator';
 import { CreateBlogDto } from '../dto/create-blog.dto';
 import { UpdateBlogDto } from '../dto/update-blog.dto';
 import { BlogService } from '../services/blog.service';
+import { PaginationResponseDto } from '@/common/dto/paginationResponse.dto';
+import { Blog } from '../entities/blog.entity';
 
 @Controller('blog')
 export class BlogController {
@@ -27,12 +29,35 @@ export class BlogController {
 
   @Public()
   @Get()
-  findAll(
+  async findAll(
     @Query('category') category?: string,
     @Query('tag', new ParseArrayPipe({ items: String, optional: true }))
     tag?: string[],
+    @Query('search') search?: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
   ) {
-    return this.blogService.findAll(category, tag);
+    const [blogs, total] = await this.blogService.findAll(
+      search,
+      category,
+      tag,
+      {
+        page,
+        limit,
+      },
+    );
+
+    const response: PaginationResponseDto<Blog> = {
+      results: blogs,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
+
+    return response;
   }
 
   @Public()

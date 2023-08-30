@@ -12,6 +12,7 @@ import { Blog } from '../entities/blog.entity';
 import { BlogTag } from '../entities/tag.entity';
 import { BlogCategoryService } from './category.service';
 import { BlogTagService } from './tag.service';
+import { PaginationDto } from '@/common/dto/pagination.dto';
 
 @Injectable()
 export class BlogService {
@@ -27,11 +28,22 @@ export class BlogService {
     return this.save(blog, createBlogDto);
   }
 
-  findAll(category?: string, tags?: string[]) {
+  findAll(
+    search?: string,
+    category?: string,
+    tags?: string[],
+    pagination?: PaginationDto,
+  ) {
     const queryBuilder = this.blogRepository
       .createQueryBuilder('blog')
       .leftJoinAndSelect('blog.tags', 'tags')
       .leftJoinAndSelect('blog.category', 'category');
+
+    if (search) {
+      queryBuilder.where('blog.title ILIKE :search', {
+        search: `%${search}%`,
+      });
+    }
 
     if (category) {
       queryBuilder.where('category.uuid = :category', { category });
@@ -43,7 +55,12 @@ export class BlogService {
         .andWhere('tags.uuid IN (:...tags)', { tags });
     }
 
-    return queryBuilder.getMany();
+    if (pagination) {
+      const { limit, page } = pagination;
+      queryBuilder.take(limit).skip((page - 1) * limit);
+    }
+
+    return queryBuilder.getManyAndCount();
   }
 
   async findOne(uuid: string) {
