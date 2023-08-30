@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -12,11 +11,11 @@ import {
 } from '@nestjs/common';
 
 import { Public } from '@/common/decorators/auth.public.decorator';
+import { PaginationResponseDto } from '@/common/dto/paginationResponse.dto';
 import { CreateBlogDto } from '../dto/create-blog.dto';
 import { UpdateBlogDto } from '../dto/update-blog.dto';
-import { BlogService } from '../services/blog.service';
-import { PaginationResponseDto } from '@/common/dto/paginationResponse.dto';
 import { Blog } from '../entities/blog.entity';
+import { BlogService } from '../services/blog.service';
 
 @Controller('blog')
 export class BlogController {
@@ -66,9 +65,13 @@ export class BlogController {
     return this.blogService.findOneBySlug(slug);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBlogDto: UpdateBlogDto) {
-    return this.blogService.update(id, updateBlogDto);
+  @Patch(':slug')
+  async update(
+    @Body() updateBlogDto: UpdateBlogDto,
+    @Param('slug') slug: string,
+  ) {
+    await this.blogService.update(slug, updateBlogDto);
+    return { message: 'Blog updated successfully' };
   }
 
   @Delete(':id')

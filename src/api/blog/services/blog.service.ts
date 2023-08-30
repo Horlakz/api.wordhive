@@ -86,8 +86,8 @@ export class BlogService {
     return blog;
   }
 
-  async update(uuid: string, updateBlogDto: UpdateBlogDto) {
-    const blog = await this.findOne(uuid);
+  async update(slug: string, updateBlogDto: UpdateBlogDto) {
+    const blog = await this.findOneBySlug(slug);
     return this.save(blog, updateBlogDto);
   }
 
