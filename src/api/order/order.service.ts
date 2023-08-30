@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 
 import { PaymentService } from '@/api/payment/payment.service';
 import { ServiceService } from '@/api/service/services/service.service';
@@ -11,6 +11,7 @@ import { UpdateOrderDto } from './dto/update-order.dto';
 import { Order } from './entities/order.entity';
 import { MailOptions } from '@/common/interfaces/mail-options';
 import { EmailService } from '@/shared/services/email.service';
+import { PaginationDto } from '@/common/dto/pagination.dto';
 
 @Injectable()
 export class OrderService {
@@ -63,11 +64,21 @@ export class OrderService {
     }
   }
 
-  async findAll(reference?: string) {
+  async findAll(search?: string, pagination?: PaginationDto) {
     const queryBuilder = this.queryBuilder();
 
-    if (reference) {
-      queryBuilder.where('reference = :reference', { reference });
+    if (search) {
+      queryBuilder.andWhere('order.reference LIKE :search', {
+        search: `%${search}%`,
+      });
+    }
+
+    if (pagination) {
+      return await this.paginate(
+        queryBuilder,
+        pagination.page,
+        pagination.limit,
+      );
     }
 
     return await queryBuilder.getMany();
@@ -133,6 +144,13 @@ export class OrderService {
       .orderBy('order.created_at', 'DESC');
 
     return queryBuilder;
+  }
+
+  paginate(queryBuilder: SelectQueryBuilder<Order>, page = 1, limit = 10) {
+    return queryBuilder
+      .take(limit)
+      .skip((page - 1) * limit)
+      .getManyAndCount();
   }
 
   async updateEntityWithStatus(id: string, status: string) {

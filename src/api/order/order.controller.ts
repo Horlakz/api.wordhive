@@ -18,6 +18,8 @@ import { RequiresUser } from '@/common/decorators/require-user.decorator';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrderService } from './order.service';
+import { PaginationResponseDto } from '@/common/dto/paginationResponse.dto';
+import { Order } from './entities/order.entity';
 
 @Controller('order')
 export class OrderController {
@@ -49,8 +51,27 @@ export class OrderController {
   }
 
   @Get('all')
-  findAll(@Query('reference') reference: string) {
-    return this.orderService.findAll(reference);
+  async findAll(
+    @Query('reference') reference: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ) {
+    const [orders, total] = await this.orderService.findAll(reference, {
+      page,
+      limit,
+    });
+
+    const response: PaginationResponseDto<Order> = {
+      results: orders as Order[],
+      pagination: {
+        total: +total,
+        page,
+        limit,
+        totalPages: Math.ceil(+total / limit),
+      },
+    };
+
+    return response;
   }
 
   @Get(':reference')
