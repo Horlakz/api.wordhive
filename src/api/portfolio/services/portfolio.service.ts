@@ -31,11 +31,18 @@ export class PortfolioService {
   }
 
   async findAll(
+    search?: string,
     field?: string,
     genres?: string[],
     paginationDto?: PaginationDto,
   ): Promise<Portfolio[]> {
     const queryBuilder = await this.queryBuilder(field, genres, paginationDto);
+
+    if (search) {
+      queryBuilder.andWhere('portfolio.title LIKE :search', {
+        search: `%${search}%`,
+      });
+    }
 
     return queryBuilder.getMany();
   }
@@ -114,9 +121,9 @@ export class PortfolioService {
     const { limit, page } = paginationDto;
 
     const queryBuilder = await this.portfolioRepository
-      .createQueryBuilder('showcase')
-      .leftJoinAndSelect('showcase.genres', 'genre')
-      .leftJoinAndSelect('showcase.field', 'field');
+      .createQueryBuilder('portfolio')
+      .leftJoinAndSelect('portfolio.genres', 'genre')
+      .leftJoinAndSelect('portfolio.field', 'field');
 
     if (field) {
       queryBuilder.where('field.uuid = :field', { field });
@@ -124,7 +131,7 @@ export class PortfolioService {
 
     if (genres && genres.length > 0) {
       queryBuilder
-        .leftJoin('showcase.genres', 'genre')
+        .leftJoin('portfolio.genres', 'genre')
         .andWhere('genre.uuid IN (:...genre)', { genres });
     }
 

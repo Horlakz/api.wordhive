@@ -85,8 +85,9 @@ export class PorfolioController {
     genre?: string[],
     @Query('limit') limit: number = 10,
     @Query('page') page: number = 1,
+    @Query('search') search?: string,
   ) {
-    const results = await this.showcaseService.findAll(field, genre, {
+    const results = await this.showcaseService.findAll(search, field, genre, {
       limit,
       page,
     });
