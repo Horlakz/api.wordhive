@@ -156,13 +156,13 @@ export class OrderService {
   async updateEntityWithStatus(id: string, status: string) {
     const order = await this.orderRepository.findOne({
       where: { uuid: id },
-      relations: ['user'],
+      relations: ['user', 'service'],
     });
     let options: Partial<MailOptions> = {
       to: order.user.email,
       context: {
         name: order.user.fullname,
-        reference: order.reference,
+        orderReference: order.reference,
       },
     };
 
@@ -182,9 +182,22 @@ export class OrderService {
           status: true,
           timestamp: date,
         };
-        options.subject = 'Order Confirmation successful';
-        options.template = 'order-confirmed';
-        await this.emailService.sendEmail(options as MailOptions);
+        const inProgressMailOptions = {
+          ...options,
+          subject: 'Order Confirmation successful',
+          template: 'order-confirmed',
+          context: {
+            name: order.user.fullname,
+            orderReference: order.reference,
+            serviceName: order.service.title,
+            serviceQuality: order.serviceQuality,
+            serviceVolume: order.serviceVolume,
+            totalAmount: order.price,
+            paymentMethod: 'Paystack',
+            orderDate: order.created_at,
+          },
+        };
+        await this.emailService.sendEmail(inProgressMailOptions as MailOptions);
         this.orderRepository.save(order);
         break;
       case 'COMPLETED':
@@ -197,7 +210,16 @@ export class OrderService {
           ...options,
           subject: 'Order Completed',
           template: 'order-completed',
-          context: { id: order.uuid },
+          context: {
+            name: order.user.fullname,
+            orderReference: order.reference,
+            serviceName: order.service.title,
+            serviceQuality: order.serviceQuality,
+            serviceVolume: order.serviceVolume,
+            totalAmount: order.price,
+            paymentMethod: 'Paystack',
+            orderDate: order.created_at,
+          },
         };
 
         await this.emailService.sendEmail(mailOptions as MailOptions);
