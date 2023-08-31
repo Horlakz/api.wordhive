@@ -19,12 +19,13 @@ export class ContactService {
   async create(createContactDto: CreateContactDto) {
     try {
       const contact = await this.contactRepository.create(createContactDto);
+      const { fullname, email, phone, country, message } = createContactDto;
 
       const options: MailOptions = {
         to: 'officialhorlakz@gmail.com',
         subject: 'You have a new message from form',
         template: 'contact-message',
-        context: { name: 'There', createContactDto },
+        context: { name: 'There', fullname, email, phone, country, message },
       };
 
       await this.emailService.sendEmail(options);
