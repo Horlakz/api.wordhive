@@ -1,33 +1,77 @@
-<p>
-    your order {{reference}} has been successfully completed and your work is out for delivery</p>
-
-
-<p>
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero ipsa
-    sapiente provident eaque explicabo possimus velit. Laborum nostrum sint
-    odit, ad quas, qui blanditiis labore ipsum illum fuga rem nesciunt.
-</p>
-
-<div class="w-full flex-center">
-    <a href="https://wordhive.ng/account/confirm-delivery?id={{id}}">
-        <button class="bg-primary text-white text-lg rounded-lg py-2 px-8">
-            Explore our Services
+<tr>
+    <td>
+        <p>
+            We are excited to inform you that your requested resource has been successfully finalized! We hope it meets
+            your expectations and serves your needs effectively.
+        </p>
+        <p>Here are the details of your order:</p>
+        <ul>
+            <li>
+                <span style="font-weight: 600"> Service Name: </span>
+                {{serviceName}}
+            </li>
+            <li>
+                <span style="font-weight: 600"> Service Quality: </span>
+                {{serviceQuality}}
+            </li>
+            <li>
+                <span style="font-weight: 600"> Service Volume: </span>
+                {{serviceVolume}}
+            </li>
+            <li>
+                <span style="font-weight: 600"> Total Amount: </span>
+                {{totalAmount}}
+            </li>
+            <li>
+                <span style="font-weight: 600"> Payment Method: </span>
+                {{paymentMethod}}
+            </li>
+            <li>
+                <span style="font-weight: 600"> Order Reference: </span>
+                {{orderReference}}
+            </li>
+            <li>
+                <span style="font-weight: 600"> Order Date: </span>
+                {{orderDate}}
+            </li>
+        </ul>
+        <p>
+            Attached to this email, you will find the file containing the service you ordered. Simply click the link
+            below to download it:
+        </p>
+    </td>
+</tr>
+<tr align="center">
+    <td>
+        <button style="
+                    background-color: #009cff;
+                    color: white;
+                    font-size: 1.125rem;
+                    border-radius: 0.5rem;
+                    border: none;
+                    padding: 0.5rem 2rem;
+                  ">
+            View file
         </button>
-    </a>
-</div>
-
-<p>
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero ipsa
-    sapiente provident eaque explicabo possimus velit. Laborum nostrum sint
-    odit, ad quas, qui blanditiis labore ipsum illum fuga rem nesciunt.
-</p>
-
-<p>
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt
-    eligendi porro odio. Beatae, laborum nobis.
-</p>
-
-<div>
-    <p>Best Regards,</p>
-    <p class="text-primary font-medium">Wordhive Team</p>
-</div>
+    </td>
+</tr>
+<tr>
+    <td>
+        <p>
+            If you have any questions or need further assistance regarding the service provided, please don't hesitate
+            to reach out to our support team. We are here to address any concerns you may have.
+            <br>
+            Your feedback is valuable to us. If you have a moment, we would appreciate it if you could provide us with
+            your thoughts on the service/resource you received. Your input helps us improve our offerings and ensures
+            that we continue to meet your expectations.
+        </p>
+        <p>
+            Thank you for choosing
+            <a href="https://wordhive.ng" style="color: #171717">
+                Wordhive
+            </a>
+            as your content resource platform. We hope to serve you even
+            better.
+        </p>
+    </td>
+</tr>

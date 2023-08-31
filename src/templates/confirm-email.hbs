@@ -1,12 +1,48 @@
-<p>
-    Here is your One Time Password(OTP) <br />
-    Please enter this code to verify your email address for wordhive
-</p>
+<tr>
+    <td>
+        <p>
+            Thank you for signing up for Wordhive, your reliable content
+            resource platform. To ensure the security of your account, we
+            kindly request that you complete the verification process.
+        </p>
+        <p>
+            Please use the following One-Time Password (OTP) to verify
+            your account:
+        </p>
+    </td>
+</tr>
 
-<div class="w-full flex-center gap-4">
-    {{#each code}}
-    <span class="bg-[#CCEBFF] font-semibold px-4 py-2 rounded-lg">{{this}}</span>
-    {{/each}}
-</div>
+<tr align="center">
+    <td style="padding: 28px 0">
+        {{#each code}}
+        <span style="
+                    background-color: #ccebff;
+                    font-weight: 600;
+                    padding: 8px 16px;
+                    margin: 0 10px;
+                    border-radius: 0.5rem;
+                  ">
+            {{this}}
+        </span>
+        {{/each}}
+    </td>
+</tr>
 
-<p>OTP will expire in 10 minutes.</p>
+<tr>
+    <td>
+        <p>
+            Please note that this OTP is only valid for a maximum of 15
+            minutes.
+        </p>
+        <p>
+            Should you encounter any issues or need further assistance,
+            please don't hesitate to reach out to our support team. We're
+            here to help.
+        </p>
+        <p>
+            We're thrilled to have you as part of the Wordhive community
+            and look forward to providing you with an exceptional content
+            experience.
+        </p>
+    </td>
+</tr>
