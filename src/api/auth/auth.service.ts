@@ -113,6 +113,14 @@ export class AuthService {
       if (user.isEmailVerified)
         throw new BadRequestException('Email already verified');
 
+      const options: MailOptions = {
+        to: email,
+        subject: 'Welcome To Wordhive',
+        template: 'welcome',
+        context: { name: user.fullname },
+      };
+
+      await this.emailService.sendEmail(options);
       await this.verifyCode(email, code);
       await this.userService.verifyEmail(email);
     } catch (err) {
